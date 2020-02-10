@@ -1,0 +1,8 @@
+{
+  "lint-staged": {
+    "*.js": [
+      "./node_modules/.bin/eslint — fix --no-error-on-unmatched-pattern",
+      "git add"
+    ]
+  }
+}
