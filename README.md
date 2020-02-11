@@ -51,4 +51,4 @@ You can test in Postman.
 
 ## To:Do
 
-- [ ] add JWT (JSON Web Tokens)
+- [ ] Add JWT (JSON Web Tokens)
