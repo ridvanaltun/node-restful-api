@@ -24,7 +24,10 @@ $ npm install
 ## Usage
 
 ```bash
-# starts server on 3000
+# starts mongodb server on your local
+$ mongod
+
+# starts node server on 3000
 $ npm run start
 ```
 
