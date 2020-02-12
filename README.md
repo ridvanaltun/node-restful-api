@@ -52,3 +52,10 @@ You can test in Postman.
 ## To:Do
 
 - [ ] Add JWT (JSON Web Tokens)
+- [ ] Add user managment endpoints
+- [ ] Add Swagger Doc. generator in builds
+- [ ] Host Swagger Doc. on Github Page
+- [ ] Take [reqres](https://reqres.in/) as an example for add some endpoints
+- [ ] Add API limits for security
+- [ ] Move all logic to src/
+- [ ] Add Travis CI/CD support
