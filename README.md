@@ -60,3 +60,6 @@ You can test in Postman.
 - [ ] Add Travis CI/CD support
 - [x] Add Joi and Celebrate support for API validation
 - [ ] Add password hashing for mongoose
+- [ ] Add Babel to use ES6 syntax
+- [ ] Add Agenda to manage cron jobs
+- [ ] Create a Dockerfile
