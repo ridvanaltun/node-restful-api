@@ -1,6 +1,6 @@
-module.exports = (app) => {
-  const todoList = require('../controllers/todoListController');
+const todoList = require('../controllers/todo');
 
+module.exports = (app) => {
   // todoList Routes
   app.route('/tasks')
     .get(todoList.list_all_tasks)
