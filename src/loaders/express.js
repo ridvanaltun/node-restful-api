@@ -25,6 +25,9 @@ module.exports = async ({ app, agenda }) => {
   // kısaca api yazıyorsak cors eklemek zorundayız
   app.use(cors());
 
+  // ignore favicon
+  app.use(middleware.ignoreFavicon);
+
   // set jwt secret
   app.set('jwt_secret', require('../config').secrets.jwt);
 
