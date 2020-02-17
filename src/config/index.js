@@ -30,4 +30,7 @@ module.exports = {
     version: process.env.API_VERSION,
     prefix: '/api',
   },
+  agenda: {
+    name: process.env.AGENDA_DB_NAME,
+  },
 };

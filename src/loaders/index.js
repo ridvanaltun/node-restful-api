@@ -2,6 +2,7 @@ const Logger = require('./logger');
 const loadModels = require('../models');
 const mongooseLoader = require('./mongoose');
 const expressLoader = require('./express');
+const agendaLoader = require('./agenda');
 
 module.exports = async ({ expressApp }) => {
   // load models
@@ -11,6 +12,9 @@ module.exports = async ({ expressApp }) => {
   mongooseLoader();
   Logger.info('✔️  DB loaded and connected!');
 
-  await expressLoader({ app: expressApp });
+  const agenda = agendaLoader();
+  Logger.info('✔️  Agenda loaded!');
+
+  await expressLoader({ app: expressApp, agenda });
   Logger.info('✔️  Express loaded');
 };

@@ -4,8 +4,9 @@ const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const { errors } = require('celebrate');
+const middleware = require('../middleware');
 
-module.exports = async ({ app }) => {
+module.exports = async ({ app, agenda }) => {
   /**
    * General
    */
@@ -75,6 +76,9 @@ module.exports = async ({ app }) => {
   // register routes to app
   const registerRoutes = require('../api');
   registerRoutes(app);
+
+  // set agenda
+  app.use('/dash', middleware.isAdmin, agenda);
 
   // api durumu hakkında bilgi döndürmek için kullanıyoruz
   // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
