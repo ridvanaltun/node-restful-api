@@ -15,7 +15,7 @@ module.exports = {
         "sourceType": "module"
     },
     "rules": {
-      // extend max len size 80 to 100
+      // increase max len size 80 to 100
       "max-len": ["error", { "code": 100 }]
     }
 }
