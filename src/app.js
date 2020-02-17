@@ -3,11 +3,14 @@ const Logger = require('./loaders/logger');
 const config = require('./config');
 const loader = require('./loaders');
 
+/**
+ * Starts express server
+ */
 async function startServer() {
   const app = express();
 
-  await loader({ expressApp: app });
-  const { port } = config.app;
+  await loader({expressApp: app});
+  const {port} = config.app;
   app.listen(port, (err) => {
     if (err) {
       Logger.error(err);

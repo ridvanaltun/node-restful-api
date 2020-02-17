@@ -3,10 +3,10 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const { errors } = require('celebrate');
+const {errors} = require('celebrate');
 const middleware = require('../middleware');
 
-module.exports = async ({ app, agenda }) => {
+module.exports = async ({app, agenda}) => {
   /**
    * General
    */
@@ -45,7 +45,7 @@ module.exports = async ({ app, agenda }) => {
   // if extended is true -> url encoded data will parsed with qs library
   // if extended is false -> url encoded data will parsed with querystring library
   // extended olunca nested obje ve arrayler x-www-form-urlencoded ile gönderilebiliyor
-  app.use(bodyParser.urlencoded({ extended: false }));
+  app.use(bodyParser.urlencoded({extended: false}));
 
   // parsing cookies
   app.use(cookieParser());
@@ -85,8 +85,12 @@ module.exports = async ({ app, agenda }) => {
 
   // api durumu hakkında bilgi döndürmek için kullanıyoruz
   // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
-  app.get('/status', (req, res) => { res.status(200).end(); });
-  app.head('/status', (req, res) => { res.status(200).end(); });
+  app.get('/status', (req, res) => {
+    res.status(200).end();
+  });
+  app.head('/status', (req, res) => {
+    res.status(200).end();
+  });
 
   // TODO: ADD API INFO
   // app.get('/api', (req, res) => {

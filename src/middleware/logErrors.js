@@ -1,5 +1,5 @@
 const ENUMS = require('../enums');
-const { APP_ENV } = process.env;
+const {APP_ENV} = process.env;
 
 const isDev = APP_ENV === ENUMS.APP_MODES.DEV;
 

@@ -1,5 +1,5 @@
 const User = require('mongoose').model('User');
-const { jwtUtils } = require('../../lib');
+const {jwtUtils} = require('../../lib');
 
 exports.list_all_users = (req, res, next) => {
   User.find({}, (err, task) => {
@@ -22,7 +22,7 @@ exports.create_a_user = async (req, res, next) => {
 
 
 exports.read_a_user = (req, res, next) => {
-  User.find({ username: req.params.username }, (err, task) => {
+  User.find({username: req.params.username}, (err, task) => {
     if (err) return next(err);
     res.json(task);
   });
@@ -31,12 +31,12 @@ exports.read_a_user = (req, res, next) => {
 
 exports.update_a_user = (req, res, next) => {
   jwtUtils.verifyToken(req, res, () => {
-    const { username } = req.params;
-    User.findOneAndUpdate({ username }, req.body, { new: true }, (err, task) => {
+    const {username} = req.params;
+    User.findOneAndUpdate({username}, req.body, {new: true}, (err, task) => {
       if (err) return next(err);
       if (task === null) {
         res.status(404);
-        res.send({ code: 404, error: 'User not found' });
+        res.send({code: 404, error: 'User not found'});
         res.end();
       } else {
         res.json(task);
@@ -53,7 +53,7 @@ exports.delete_a_user = (req, res, next) => {
     }, (err) => {
       if (err) return next(err);
       res.status(204);
-      res.send({ message: 'User successfully deleted' });
+      res.send({message: 'User successfully deleted'});
       res.end();
     });
   });

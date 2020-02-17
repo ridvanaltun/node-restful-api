@@ -5,6 +5,6 @@ module.exports = (req, res, next) => {
     next();
   } else {
     res.status(401);
-    res.send({ code: 401, error: 'Unauthorized' });
+    res.send({code: 401, error: 'Unauthorized'});
   }
 };

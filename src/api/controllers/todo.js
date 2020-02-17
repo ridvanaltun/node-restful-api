@@ -26,7 +26,7 @@ exports.read_a_task = (req, res, next) => {
 
 
 exports.update_a_task = (req, res, next) => {
-  Task.findOneAndUpdate({ _id: req.params.taskId }, req.body, { new: true }, (err, task) => {
+  Task.findOneAndUpdate({_id: req.params.taskId}, req.body, {new: true}, (err, task) => {
     if (err) return next(err);
     res.json(task);
   });
@@ -38,6 +38,6 @@ exports.delete_a_task = (req, res, next) => {
     _id: req.params.taskId,
   }, (err) => {
     if (err) return next(err);
-    res.json({ message: 'Task successfully deleted' });
+    res.json({message: 'Task successfully deleted'});
   });
 };

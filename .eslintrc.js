@@ -1,10 +1,10 @@
-{
+module.exports = {
     "env": {
         "es6": true,
         "node": true
     },
     "extends": [
-        "airbnb-base"
+        "google"
     ],
     "globals": {
         "Atomics": "readonly",
@@ -15,5 +15,7 @@
         "sourceType": "module"
     },
     "rules": {
+      // extend max len size 80 to 100
+      "max-len": ["error", { "code": 100 }]
     }
 }

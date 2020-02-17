@@ -1,10 +1,10 @@
-const { celebrate, Joi, Segments } = require('celebrate');
+const {celebrate, Joi, Segments} = require('celebrate');
 
 const login = celebrate({
   [Segments.BODY]: Joi.object().keys({
     username: Joi.string().min(6).max(30).required(),
     password: Joi.string().min(8).max(30).regex(/[a-zA-Z0-9]{3,30}/)
-      .required(),
+        .required(),
   }),
 });
 
