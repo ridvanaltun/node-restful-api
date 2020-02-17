@@ -97,20 +97,20 @@ module.exports = async ({ app, agenda }) => {
    * Error Handling
    */
 
-  // handle validation errors
+  // log errors
+  app.use(middleware.logErrors);
+
+  // handle celebrate errors
   app.use(errors());
 
   // 404
-  app.use((req, res) => {
-    res.status(404);
-    res.send({ error: `${req.originalUrl} not found` });
-  });
+  app.use(middleware.notFoundHandler);
 
-  // 500 - Any server error
-  app.use((err, req, res) => {
-    res.status(err.status || 500);
-    res.send({ error: err });
-  });
+  // handle client errors
+  app.use(middleware.clientErrorHandler);
+
+  // handle server errors
+  app.use(middleware.serverErrorHandler);
 
   return app;
 };
