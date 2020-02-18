@@ -1,9 +1,10 @@
 const auth = require('../controllers/auth');
 const validate = require('../validations');
+const middleware = require('../../middleware');
 
 module.exports = (app) => {
   app.route('/login')
-      .post(validate.auth.login, auth.login);
+      .post(validate.auth.login, middleware.signToken, auth.login);
 
   app.route('/logout')
       .post(validate.auth.logout, auth.logout);

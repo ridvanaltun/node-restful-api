@@ -1,7 +1,7 @@
 const User = require('mongoose').model('User');
-const {jwtUtils} = require('../../lib');
 
 exports.login = (req, res, next) => {
+  const {token} = req;
   User.find({username: req.body.username}, (err, task) => {
     if (err) return next(err);
     if (task.length === 0) {
@@ -9,10 +9,8 @@ exports.login = (req, res, next) => {
       res.send({code: 401, error: 'Username or password incorrect'});
       res.end();
     } else {
-      jwtUtils.signToken(req, res, (token) => {
-        res.set('X-Subject-Token', token);
-        res.json(task);
-      });
+      res.set('X-Subject-Token', token);
+      res.json(task);
     }
   });
 };

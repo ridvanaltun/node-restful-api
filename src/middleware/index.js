@@ -4,6 +4,8 @@ const clientErrorHandler = require('./clientErrorHandler');
 const serverErrorHandler = require('./serverErrorHandler');
 const notFoundHandler = require('./notFoundHandler');
 const logErrors = require('./logErrors');
+const verifyToken = require('./verifyToken');
+const signToken = require('./signToken');
 
 module.exports = {
   isAdmin,
@@ -12,4 +14,6 @@ module.exports = {
   serverErrorHandler,
   notFoundHandler,
   logErrors,
+  verifyToken,
+  signToken,
 };
