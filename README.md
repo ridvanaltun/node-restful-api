@@ -63,5 +63,5 @@ You can test in Postman.
 - [ ] Add Babel to use ES6 syntax
 - [x] Add Agenda to manage cron jobs
 - [ ] Create a Dockerfile
-- [ ] Move JWT verify process to router
+- [x] Convert JWT utils to middleware
 - [ ] Add API versioning
