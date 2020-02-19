@@ -54,7 +54,7 @@ You can test in Postman.
 - [x] Add JWT (JSON Web Tokens)
 - [ ] Add ability to refresh JWT
 - [x] Add user endpoints
-- [ ] Add Swagger Doc. generator in builds
+- [ ] Add Swagger API document generator
 - [ ] Add API limits for security
 - [x] Move all logic to src/
 - [ ] Add Travis CI/CD support
@@ -62,6 +62,12 @@ You can test in Postman.
 - [ ] Add password hashing for mongoose
 - [ ] Add Babel to use ES6 syntax
 - [x] Add Agenda to manage cron jobs
-- [ ] Create a Dockerfile
-- [x] Convert JWT utils to middleware
+- [x] Convert JWT utils to a middleware
 - [ ] Add API versioning
+- [ ] Add pagination
+- [ ] Run server with environment (dev, prod)
+- [ ] Login and logouts logs
+- [ ] Add i18n
+- [ ] Add mailer
+- [ ] Add caching system
+- [ ] Add PassportJS support
