@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 const {Schema} = mongoose;
 
@@ -27,6 +28,9 @@ const userSchema = new Schema({
     trim: true,
   },
 });
+
+// pagination support
+userSchema.plugin(mongoosePaginate);
 
 // this will add created_at and updated_at timestamps
 userSchema.set('timestamps', {createdAt: 'created_at', updatedAt: 'updated_at'});

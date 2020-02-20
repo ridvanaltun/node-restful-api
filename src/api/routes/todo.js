@@ -1,9 +1,10 @@
 const todoList = require('../controllers/todo');
+const validate = require('../validations');
 
 module.exports = (app) => {
   // todoList Routes
   app.route('/tasks')
-      .get(todoList.list_all_tasks)
+      .get(validate.common.list, todoList.list_all_tasks)
       .post(todoList.create_a_task);
 
 

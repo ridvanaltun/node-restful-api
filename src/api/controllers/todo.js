@@ -1,9 +1,11 @@
 const Task = require('mongoose').model('Task');
+const {paginator} = require('../../lib');
 
 exports.list_all_tasks = (req, res, next) => {
-  Task.find({}, (err, task) => {
-    if (err) next(err);
-    res.json(task);
+  const query = {};
+  paginator(Task, 'tasks', req, query, (err, tasks) => {
+    if (err) return next(err);
+    res.json(tasks);
   });
 };
 

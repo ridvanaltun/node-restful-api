@@ -64,7 +64,7 @@ You can test in Postman.
 - [x] Add Agenda to manage cron jobs
 - [x] Convert JWT utils to a middleware
 - [ ] Add API versioning
-- [ ] Add pagination
+- [x] Add pagination
 - [ ] Run server with environment (dev, prod)
 - [ ] Login and logouts logs
 - [ ] Add i18n
