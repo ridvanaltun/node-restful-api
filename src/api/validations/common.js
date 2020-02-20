@@ -4,7 +4,7 @@
 
 const {celebrate, Joi, Segments} = require('celebrate');
 
-// sorting string example: 'field -test', - (minus) meaning desc, otherwise asc
+// sort_order example: 'field -test', - (minus) meaning desc, otherwise asc
 const list = celebrate({
   [Segments.QUERY]: Joi.object().keys({
     page: Joi.number(),
