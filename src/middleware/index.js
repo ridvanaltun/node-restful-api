@@ -6,6 +6,7 @@ const notFoundHandler = require('./notFoundHandler');
 const logErrors = require('./logErrors');
 const verifyToken = require('./verifyToken');
 const signToken = require('./signToken');
+const removeEmptyProperties = require('./removeEmptyProperties');
 
 module.exports = {
   isAdmin,
@@ -16,4 +17,5 @@ module.exports = {
   logErrors,
   verifyToken,
   signToken,
+  removeEmptyProperties,
 };

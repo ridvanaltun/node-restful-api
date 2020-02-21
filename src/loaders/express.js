@@ -19,6 +19,7 @@ module.exports = async ({app, agenda}) => {
   // uyugulamamız ile konuşan client'ın ip adresi ve diğer bir kaç bilgisini elde edebiliriz
   // app.enable('trust proxy');
 
+  // full access of our API
   // başka domain'lerden gelen istekleri kabul et
   // api'ımızı site üstünden kullanabilir
   // diğer türlüsü sadece kendi domainimiz üstünden gelen istekler kabul edilir
@@ -30,6 +31,10 @@ module.exports = async ({app, agenda}) => {
 
   // set jwt secret
   app.set('jwt_secret', require('../config').secrets.jwt);
+
+  // remove empty properties from body, query and params
+  // in this way we don't worry about the incomming data was empty or not
+  app.use(middleware.removeEmptyProperties());
 
   /**
    * Parsing

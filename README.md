@@ -71,3 +71,6 @@ You can test in Postman.
 - [ ] Add mailer
 - [ ] Add caching system
 - [ ] Add PassportJS support
+- [ ] Add file uploading as a middleware
+- [ ] Add image uploading as a middleware
+- [x] Add empty properties remover middleware
