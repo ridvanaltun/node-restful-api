@@ -4,6 +4,7 @@ const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
+const helmet = require('helmet');
 const middleware = require('../middleware');
 
 module.exports = async ({app, agenda}) => {
@@ -25,6 +26,9 @@ module.exports = async ({app, agenda}) => {
   // diğer türlüsü sadece kendi domainimiz üstünden gelen istekler kabul edilir
   // kısaca api yazıyorsak cors eklemek zorundayız
   app.use(cors());
+
+  // secure http headers
+  app.use(helmet());
 
   // ignore favicon
   app.use(middleware.ignoreFavicon);
