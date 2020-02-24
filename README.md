@@ -59,7 +59,7 @@ You can test in Postman.
 - [x] Move all logic to src/
 - [ ] Add Travis CI/CD support
 - [x] Add Joi and Celebrate support for API validation
-- [ ] Add password hashing for mongoose
+- [x] Add password hashing
 - [ ] Add Babel to use ES6 syntax
 - [x] Add Agenda to manage cron jobs
 - [x] Convert JWT utils to a middleware
@@ -70,7 +70,6 @@ You can test in Postman.
 - [ ] Add i18n
 - [ ] Add mailer
 - [ ] Add caching system
-- [ ] Add PassportJS support
 - [ ] Add file uploading as a middleware
 - [ ] Add image uploading as a middleware
 - [x] Add empty properties remover middleware

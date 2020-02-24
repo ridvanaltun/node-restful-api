@@ -1,5 +1,5 @@
 const User = require('mongoose').model('User');
-const {paginator} = require('../../lib');
+const {paginator, password: pw} = require('../../lib');
 
 exports.list_all_users = (req, res, next) => {
   const query = {};
@@ -11,46 +11,59 @@ exports.list_all_users = (req, res, next) => {
 
 
 exports.create_a_user = async (req, res, next) => {
-  const newTask = new User(req.body);
-  const {token} = req;
-  newTask.save((err, task) => {
-    if (err) return next(err);
-    res.set('X-Subject-Token', token);
-    res.json(task);
-  });
+  try {
+    const {password} = req.body;
+    const {token} = req;
+    const hashedPassword = await pw.hashPassword(password);
+    // create a new user
+    const newUser = new User({
+      ...req.body,
+      password: hashedPassword,
+    });
+    // save the user
+    newUser.save((err, user) => {
+      res.set('X-Subject-Token', token);
+
+      // hide password in response
+      user.password = undefined;
+
+      res.status(201);
+      res.json(user);
+    });
+  } catch (err) {
+    next(err);
+  }
 };
 
 
 exports.read_a_user = (req, res, next) => {
-  User.find({username: req.params.username}, (err, task) => {
+  const {username} = req.body;
+  User.findOne({username}, (err, user) => {
     if (err) return next(err);
-    res.json(task);
+    res.json(user);
   });
 };
 
 
 exports.update_a_user = (req, res, next) => {
   const {username} = req.params;
-  User.findOneAndUpdate({username}, req.body, {new: true}, (err, task) => {
+  User.findOneAndUpdate({username}, req.body, {new: true}, (err, user) => {
     if (err) return next(err);
-    if (task === null) {
+    if (user) {
+      res.json(user);
+    } else {
       res.status(404);
       res.send({code: 404, error: 'User not found'});
-      res.end();
-    } else {
-      res.json(task);
     }
   });
 };
 
 
 exports.delete_a_user = (req, res, next) => {
-  User.remove({
-    username: req.params.username,
-  }, (err) => {
+  const {username} = req.params;
+  User.remove({username}, (err) => {
     if (err) return next(err);
     res.status(204);
     res.send({message: 'User successfully deleted'});
-    res.end();
   });
 };
