@@ -52,7 +52,7 @@ You can test in Postman.
 ## To:Do
 
 - [x] Add JWT (JSON Web Tokens)
-- [ ] Add ability to refresh JWT
+- [x] Add ability to refresh token
 - [x] Add user endpoints
 - [ ] Add Swagger API document generator
 - [ ] Add API limits for security

@@ -16,8 +16,8 @@ const logout = celebrate({
 
 const token = celebrate({
   [Segments.HEADERS]: Joi.object().keys({
-    'x-auth-token': Joi.string().required(),
-  }),
+    'x-refresh-token': Joi.string().required(),
+  }).unknown(),
 });
 
 module.exports = {

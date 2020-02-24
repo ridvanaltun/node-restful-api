@@ -13,7 +13,7 @@ exports.list_all_users = (req, res, next) => {
 exports.create_a_user = async (req, res, next) => {
   try {
     const {password} = req.body;
-    const {token} = req;
+    const {access, refresh} = req.token;
     const hashedPassword = await pw.hashPassword(password);
     // create a new user
     const newUser = new User({
@@ -22,7 +22,8 @@ exports.create_a_user = async (req, res, next) => {
     });
     // save the user
     newUser.save((err, user) => {
-      res.set('X-Subject-Token', token);
+      res.set('X-Access-Token', access);
+      res.set('X-Refresh-Token', refresh);
 
       // hide password in response
       user.password = undefined;
