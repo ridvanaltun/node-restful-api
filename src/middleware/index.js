@@ -5,6 +5,7 @@ const serverErrorHandler = require('./serverErrorHandler');
 const notFoundHandler = require('./notFoundHandler');
 const logErrors = require('./logErrors');
 const verifyToken = require('./verifyToken');
+const verifyRefreshToken = require('./verifyRefreshToken');
 const signToken = require('./signToken');
 const removeEmptyProperties = require('./removeEmptyProperties');
 
@@ -16,6 +17,7 @@ module.exports = {
   notFoundHandler,
   logErrors,
   verifyToken,
+  verifyRefreshToken,
   signToken,
   removeEmptyProperties,
 };

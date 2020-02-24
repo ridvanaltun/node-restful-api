@@ -10,5 +10,5 @@ module.exports = (app) => {
       .post(validate.auth.logout, auth.logout);
 
   app.route('/token')
-      .post(validate.auth.token, auth.token);
+      .post(validate.auth.token, middleware.verifyRefreshToken, auth.token);
 };
