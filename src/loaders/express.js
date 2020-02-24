@@ -90,7 +90,7 @@ module.exports = async ({app, agenda}) => {
   registerRoutes(app);
 
   // set agenda
-  app.use('/dash', middleware.isAdmin, agenda);
+  app.use('/dash', middleware.verifyToken, middleware.isAdmin, agenda);
 
   // api durumu hakkında bilgi döndürmek için kullanıyoruz
   // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
