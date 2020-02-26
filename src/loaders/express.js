@@ -86,7 +86,7 @@ module.exports = async ({app, agenda}) => {
    */
 
   // register routes to app
-  const registerRoutes = require('../api/routes');
+  const registerRoutes = require('../api');
   registerRoutes(app);
 
   // set agenda

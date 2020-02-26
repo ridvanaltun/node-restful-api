@@ -32,7 +32,7 @@ exports.logout = (req, res, next) => {
   // TODO: ADD LOGIC
 };
 
-exports.token = (req, res, next) => {
+exports.create_a_token = (req, res, next) => {
   const {username} = req;
 
   const {
