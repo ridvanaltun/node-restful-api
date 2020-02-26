@@ -3,12 +3,31 @@ const APP_MODES = {
   DEV: 'development',
 };
 
-const USER_TYPES = {
+const USER_ROLES = {
   USER: 'user',
   ADMIN: 'admin',
 };
 
+const HTTP_METHODS = [
+  'GET',
+  'POST',
+  'DELETE',
+  'PUT',
+  'PATCH',
+  'HEAD',
+  'OPTIONS',
+  'COPY',
+  'LINK',
+  'UNLINK',
+  'PURGE',
+  'LOCK',
+  'UNLOCK',
+  'PROPFIND',
+  'VIEW',
+];
+
 module.exports = {
   APP_MODES,
-  USER_TYPES,
+  USER_ROLES,
+  HTTP_METHODS,
 };

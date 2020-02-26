@@ -1,6 +1,6 @@
 const {celebrate, Joi, Segments} = require('celebrate');
 
-const post = celebrate({
+exports.create_a_user = celebrate({
   [Segments.BODY]: Joi.object().keys({
     username: Joi.string().min(6).max(30).required(),
     password: Joi.string().min(8).max(30).regex(/[a-zA-Z0-9]{3,30}/)
@@ -11,7 +11,7 @@ const post = celebrate({
   }),
 });
 
-const put = celebrate({
+exports.update_a_user = celebrate({
   [Segments.BODY]: Joi.object().keys({
     password: Joi.string().min(8).max(30).regex(/[a-zA-Z0-9]{3,30}/)
         .required(),
@@ -19,8 +19,3 @@ const put = celebrate({
     last_name: Joi.string().required(),
   }),
 });
-
-module.exports = {
-  post,
-  put,
-};

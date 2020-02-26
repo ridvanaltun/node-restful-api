@@ -5,7 +5,7 @@
 const {celebrate, Joi, Segments} = require('celebrate');
 
 // sort_order example: 'field -test', - (minus) meaning desc, otherwise asc
-const list = celebrate({
+exports.pagination = celebrate({
   [Segments.QUERY]: Joi.object().keys({
     page: Joi.number(),
     limit: Joi.number(),
@@ -13,7 +13,3 @@ const list = celebrate({
     sort_order: Joi.string(),
   }),
 });
-
-module.exports = {
-  list,
-};

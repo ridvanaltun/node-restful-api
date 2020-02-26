@@ -38,7 +38,7 @@ exports.create_a_user = async (req, res, next) => {
 
 
 exports.read_a_user = (req, res, next) => {
-  const {username} = req.body;
+  const {username} = req.params;
   User.findOne({username}, (err, user) => {
     if (err) return next(err);
     res.json(user);

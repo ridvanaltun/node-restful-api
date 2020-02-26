@@ -67,6 +67,7 @@ You can test in Postman.
 - [x] Add pagination
 - [ ] Run server with environment (dev, prod)
 - [ ] Login and logouts logs
+- [x] Add Request logger
 - [ ] Add i18n
 - [ ] Add mailer
 - [ ] Add caching system

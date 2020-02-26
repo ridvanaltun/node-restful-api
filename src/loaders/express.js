@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
+const config = require('../config');
 
 module.exports = async ({app, agenda}) => {
   /**
@@ -18,7 +19,7 @@ module.exports = async ({app, agenda}) => {
   // bir client'ın ip adresi yerine proxy'nin ip adresini görürüz
   // trust proxy özelliğini aktifleştirerek header içine X-Forwarded-* başlığı ile
   // uyugulamamız ile konuşan client'ın ip adresi ve diğer bir kaç bilgisini elde edebiliriz
-  // app.enable('trust proxy');
+  // app.set('trust proxy', true);
 
   // full access of our API
   // başka domain'lerden gelen istekleri kabul et
@@ -34,7 +35,7 @@ module.exports = async ({app, agenda}) => {
   app.use(middleware.ignoreFavicon);
 
   // set jwt secret
-  app.set('jwt_secret', require('../config').secrets.jwt);
+  app.set('jwt_secret', config.secrets.jwt.access);
 
   // remove empty properties from body, query and params
   // in this way we don't worry about the incomming data was empty or not
@@ -62,6 +63,10 @@ module.exports = async ({app, agenda}) => {
   /**
    * Logging
    */
+
+  // log requests
+  const {REQUEST_LOGGER_ENABLE, REQUEST_LOGGER_RETURN_ID} = process.env;
+  if (REQUEST_LOGGER_ENABLE) app.use(middleware.requestLogger(REQUEST_LOGGER_RETURN_ID));
 
   // node.js logger
   // normalde bu kütüphaneyi sadece import ederek kullanabiliyoruz
