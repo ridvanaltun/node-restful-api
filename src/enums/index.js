@@ -3,12 +3,12 @@ const APP_MODES = {
   DEV: 'development',
 };
 
-const USER_TYPES = {
+const USER_ROLES = {
   USER: 'user',
   ADMIN: 'admin',
 };
 
 module.exports = {
   APP_MODES,
-  USER_TYPES,
+  USER_ROLES,
 };
