@@ -1,9 +1,9 @@
 const dotenv = require('dotenv');
 
 const envFound = dotenv.config();
+
 if (!envFound) {
   // This error should crash whole process
-
   throw new Error('⚠️  Couldn\'t find .env file  ⚠️');
 }
 
@@ -19,16 +19,20 @@ module.exports = {
   },
   logs: {
     level: process.env.LOG_LEVEL || 'silly',
-    file: process.env.LOG_PATH,
-    console: process.env.LOG_ENABLE_CONSOLE || true,
   },
   request_logs: {
     enable: process.env.REQUEST_LOGGER_ENABLE,
     return_id: process.env.REQUEST_LOGGER_RETURN_ID,
   },
   secrets: {
-    jwt_access_token: process.env.JWT_ACCESS_TOKEN_SECRET,
-    jwt_refresh_token: process.env.JWT_REFRESH_TOKEN_SECRET,
+    jwt: {
+      access: process.env.JWT_ACCESS_TOKEN_SECRET,
+      refresh: process.env.JWT_REFRESH_TOKEN_SECRET,
+    },
+  },
+  jwt: {
+    access_token_life: process.env.JWT_ACCESS_TOKEN_LIFE,
+    refresh_token_life: process.env.JWT_REFRESH_TOKEN_LIFE,
   },
   api: {
     version: process.env.API_VERSION,

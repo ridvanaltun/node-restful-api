@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
+const config = require('../config');
 
 module.exports = async ({app, agenda}) => {
   /**
@@ -34,7 +35,7 @@ module.exports = async ({app, agenda}) => {
   app.use(middleware.ignoreFavicon);
 
   // set jwt secret
-  app.set('jwt_secret', require('../config').secrets.jwt);
+  app.set('jwt_secret', config.secrets.jwt.access);
 
   // remove empty properties from body, query and params
   // in this way we don't worry about the incomming data was empty or not
