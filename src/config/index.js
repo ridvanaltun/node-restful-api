@@ -22,6 +22,10 @@ module.exports = {
     file: process.env.LOG_PATH,
     console: process.env.LOG_ENABLE_CONSOLE || true,
   },
+  request_logs: {
+    enable: process.env.REQUEST_LOGGER_ENABLE,
+    return_id: process.env.REQUEST_LOGGER_RETURN_ID,
+  },
   secrets: {
     jwt_access_token: process.env.JWT_ACCESS_TOKEN_SECRET,
     jwt_refresh_token: process.env.JWT_REFRESH_TOKEN_SECRET,

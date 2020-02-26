@@ -8,6 +8,7 @@ const verifyToken = require('./verifyToken');
 const verifyRefreshToken = require('./verifyRefreshToken');
 const signToken = require('./signToken');
 const removeEmptyProperties = require('./removeEmptyProperties');
+const requestLogger = require('./requestLogger');
 
 module.exports = {
   isAdmin,
@@ -20,4 +21,5 @@ module.exports = {
   verifyRefreshToken,
   signToken,
   removeEmptyProperties,
+  requestLogger,
 };
