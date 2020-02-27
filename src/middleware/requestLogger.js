@@ -17,7 +17,7 @@ module.exports = (returnReqId) => {
 
     log.save((err, data) => {
       if (err) return next(err);
-      if (returnReqId) res.set('Request-Id', data._id);
+      if (returnReqId) res.set('X-Request-Id', data._id);
       next();
     });
   };
