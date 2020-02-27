@@ -1,5 +1,7 @@
-const {USER_ROLES} = require('../enums');
 const User = require('mongoose').model('User');
+const ex = require('../exceptions');
+
+const {USER_ROLES} = require('../enums');
 
 module.exports = (req, res, next) => {
   const username = req.username;
@@ -8,15 +10,8 @@ module.exports = (req, res, next) => {
 
     const IS_ADMIN = USER_ROLES.ADMIN === user.role;
 
-    if (!IS_ADMIN) {
-      res.status(401);
-      res.send({
-        code: 401,
-        title: 'Unauthorized',
-        message: 'Only users at the administrative level can access',
-      });
-    }
+    if (IS_ADMIN) return next();
 
-    next();
+    next(new ex.UnauthorizedError('Only users at the administrative level can access'));
   });
 };
