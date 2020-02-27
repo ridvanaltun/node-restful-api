@@ -16,6 +16,9 @@ module.exports = (err, req, res, next) => {
   // Handle not found errors
   if (err.name === 'NotFoundError') return handleNotFoundError(err, res);
 
+  // Handle not found errors
+  if (err.name === 'TooManyRequestError') return handleTooManyRequestError(err, res);
+
   // Pass error to server error handler
   next(err);
 };
@@ -63,5 +66,10 @@ const handleUnauthorizedError = (err, res) => {
 const handleNotFoundError = (err, res) => {
   res.status(404);
   res.send({code: 404, title: 'Not Found', message: err.message});
+};
+
+const handleTooManyRequestError = (err, res) => {
+  res.status(429);
+  res.send({code: 429, title: 'Too Many Request', message: err.message});
 };
 
