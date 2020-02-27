@@ -6,16 +6,16 @@ const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
-const config = require('../config');
+const limitters = require('../api/limitters');
 
 module.exports = async ({app, agenda}) => {
   /**
    * General
    */
 
-  // if your not running behind a proxy, it's not required
-  // default is disabled
-  // normalde bir proxy arkasında çalışıyorken proxy ile iletişime geçen
+  // Enable if you're behind a reverse proxy (Heroku, Bluemix, AWS ELB, Nginx, etc)
+  // see https://expressjs.com/en/guide/behind-proxies.html
+  // Normalde bir proxy arkasında çalışıyorken proxy ile iletişime geçen
   // bir client'ın ip adresi yerine proxy'nin ip adresini görürüz
   // trust proxy özelliğini aktifleştirerek header içine X-Forwarded-* başlığı ile
   // uyugulamamız ile konuşan client'ın ip adresi ve diğer bir kaç bilgisini elde edebiliriz
@@ -34,12 +34,19 @@ module.exports = async ({app, agenda}) => {
   // ignore favicon
   app.use(middleware.ignoreFavicon);
 
-  // set jwt secret
-  app.set('jwt_secret', config.secrets.jwt.access);
-
   // remove empty properties from body, query and params
   // in this way we don't worry about the incomming data was empty or not
   app.use(middleware.removeEmptyProperties());
+
+  /**
+   * Global Limitters
+   *
+   * General limiter for all requests.
+   * Middleware with different logic and limiters can be applied to
+   * exact route or application part as well.
+   */
+
+  app.use(middleware.rateLimitterMongo(limitters.bruteForce));
 
   /**
    * Parsing
