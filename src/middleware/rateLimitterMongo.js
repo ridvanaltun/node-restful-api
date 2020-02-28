@@ -28,6 +28,8 @@ module.exports = (options) => {
           ` this endpoint allows you ${points} request in ${duration} sec.` :
           ` this endpoint allows you ${points} request in ${duration} secs.`;
 
+          res.set('Retry-After', String(retrySecs));
+
           next(new ex.TooManyRequestError(message));
         });
   };

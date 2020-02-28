@@ -6,7 +6,6 @@ const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
-const limitters = require('../api/limitters');
 
 module.exports = async ({app, agenda}) => {
   /**
@@ -46,7 +45,12 @@ module.exports = async ({app, agenda}) => {
    * exact route or application part as well.
    */
 
-  app.use(middleware.rateLimitterMongo(limitters.bruteForce));
+  const globalRateLimitOptions = {
+    points: 10, // Number of points
+    duration: 1, // Per second(s)
+  };
+
+  app.use(middleware.rateLimitterMongo(globalRateLimitOptions));
 
   /**
    * Parsing
