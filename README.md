@@ -55,7 +55,7 @@ You can test in Postman.
 - [x] Add ability to refresh token
 - [x] Add user endpoints
 - [ ] Add Swagger API document generator
-- [ ] Add API limits for security
+- [x] Add API limitter for security
 - [x] Move all logic to src/
 - [ ] Add Travis CI/CD support
 - [x] Add Joi and Celebrate support for API validation

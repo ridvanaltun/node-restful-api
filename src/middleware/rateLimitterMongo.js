@@ -16,8 +16,19 @@ module.exports = (options) => {
         .then(() => {
           next();
         })
-        .catch(() => {
-          next(new ex.TooManyRequestError('You exceeded the api limit'));
+        .catch((rlRes) => {
+          const duration = Math.round(options.duration) || 1;
+          const points = options.points;
+          const retrySecs = Math.round(rlRes.msBeforeNext / 1000) || 1;
+
+          message = retrySecs === 1 ?
+          `You exceeded the api limit, retry after ${retrySecs} sec,` :
+          `You exceeded the api limit, retry after ${retrySecs} secs,`;
+          message += duration === 1 ?
+          ` this endpoint allows you ${points} request in ${duration} sec.` :
+          ` this endpoint allows you ${points} request in ${duration} secs.`;
+
+          next(new ex.TooManyRequestError(message));
         });
   };
 };
