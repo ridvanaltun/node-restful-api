@@ -19,7 +19,7 @@ exports.login = (req, res, next) => {
       if (isPasswordCorrect) {
         res.set('X-Access-Token', access);
         res.set('X-Refresh-Token', refresh);
-        res.send(user);
+        res.json(user);
       } else {
         // when password wrong
         next(new ex.BadRequestError('Password incorrect'));

@@ -29,8 +29,7 @@ exports.create_a_user = async (req, res, next) => {
       // hide password in response
       user.password = undefined;
 
-      res.status(201);
-      res.json(user);
+      res.status(201).json(user);
     });
   } catch (err) {
     next(err);
@@ -70,7 +69,6 @@ exports.delete_a_user = (req, res, next) => {
   const {username} = req.params;
   User.remove({username}, (err) => {
     if (err) return next(err);
-    res.status(204);
-    res.send({message: 'User successfully deleted'});
+    res.status(204).end();
   });
 };

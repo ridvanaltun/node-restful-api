@@ -40,6 +40,6 @@ exports.delete_a_task = (req, res, next) => {
     _id: req.params.taskId,
   }, (err) => {
     if (err) return next(err);
-    res.json({message: 'Task successfully deleted'});
+    res.status(204).end();
   });
 };
