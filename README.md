@@ -31,46 +31,19 @@ $ mongod
 $ npm run start
 ```
 
-**Endpoints:**
-
-```bash
-# list tasks
-GET http://localhost:3000/tasks
-
-# get details of a task
-GET http://localhost:3000/tasks/:id
-
-# update a task
-PUT http://localhost:3000/tasks/:id
-
-# create task
-POST http://localhost:3000/tasks
-```
-
-You can test in Postman.
-
 ## To:Do
 
 - [x] Add JWT (JSON Web Tokens)
 - [x] Add ability to refresh token
-- [x] Add user endpoints
-- [ ] Add Swagger API document generator
+- [ ] Add API documentation (Swagger) generator
+- [ ] Add Postman collection
 - [x] Add API limitter for security
-- [x] Move all logic to src/
-- [ ] Add Travis CI/CD support
 - [x] Add Joi and Celebrate support for API validation
 - [x] Add password hashing
-- [ ] Add Babel to use ES6 syntax
-- [x] Add Agenda to manage cron jobs
-- [x] Convert JWT utils to a middleware
+- [x] Add cron jobs manager (Agenda)
 - [ ] Add API versioning
 - [x] Add pagination
 - [ ] Run server with environment (dev, prod)
-- [ ] Login and logouts logs
-- [x] Add Request logger
-- [ ] Add i18n
-- [ ] Add mailer
-- [ ] Add caching system
-- [ ] Add file uploading as a middleware
-- [ ] Add image uploading as a middleware
-- [x] Add empty properties remover middleware
+- [ ] Add login and logout logs
+- [x] Add request logger
+- [ ] Add documantation for pagination and endpoints
