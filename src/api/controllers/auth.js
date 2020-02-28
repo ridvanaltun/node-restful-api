@@ -13,6 +13,9 @@ exports.login = (req, res, next) => {
       // validate password
       const isPasswordCorrect = await pw.validatePassword(password, user.password);
 
+      // hide password after validation
+      user.password = undefined;
+
       if (isPasswordCorrect) {
         res.set('X-Access-Token', access);
         res.set('X-Refresh-Token', refresh);
