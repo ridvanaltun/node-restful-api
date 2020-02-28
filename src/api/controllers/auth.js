@@ -1,31 +1,34 @@
 const User = require('mongoose').model('User');
 const jwt = require('jsonwebtoken');
+const ex = require('../../exceptions');
 const {password: pw} = require('../../lib');
 
 exports.login = (req, res, next) => {
   const {access, refresh} = req.token;
   const {username, password} = req.body;
 
-  User.findOne({username}, (err, user) => {
+  User.findOne({username}, async (err, user) => {
     if (err) return next(err);
     if (user) {
       // validate password
-      const isPasswordCorrect = pw.validatePassword(password, user.password);
+      const isPasswordCorrect = await pw.validatePassword(password, user.password);
+
+      // hide password after validation
+      user.password = undefined;
 
       if (isPasswordCorrect) {
         res.set('X-Access-Token', access);
         res.set('X-Refresh-Token', refresh);
-        res.json(user);
+        res.send(user);
+      } else {
+        // when password wrong
+        next(new ex.BadRequestError('Password incorrect'));
       }
-
-      // when password wrong
-      res.status(400);
-      res.send({code: 400, title: 'Bad Request', message: 'Password incorrect'});
     } else {
-      res.status(404);
-      res.send({code: 404, title: 'Not Found', message: 'User not found'});
+      // when user not found
+      next(new ex.NotFoundError('User not found'));
     }
-  });
+  }).select('+password');
 };
 
 exports.logout = (req, res, next) => {

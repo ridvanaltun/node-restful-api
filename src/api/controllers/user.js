@@ -1,5 +1,6 @@
 const User = require('mongoose').model('User');
 const {paginator, password: pw} = require('../../lib');
+const ex = require('../../exceptions');
 
 exports.list_all_users = (req, res, next) => {
   const query = {};
@@ -41,7 +42,12 @@ exports.read_a_user = (req, res, next) => {
   const {username} = req.params;
   User.findOne({username}, (err, user) => {
     if (err) return next(err);
-    res.json(user);
+    if (user) {
+      res.json(user);
+    } else {
+      // when user not found
+      next(new ex.NotFoundError('User not found'));
+    }
   });
 };
 
@@ -53,8 +59,8 @@ exports.update_a_user = (req, res, next) => {
     if (user) {
       res.json(user);
     } else {
-      res.status(404);
-      res.send({code: 404, error: 'User not found'});
+      // when user not found
+      next(new ex.NotFoundError('User not found'));
     }
   });
 };

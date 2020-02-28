@@ -7,6 +7,18 @@ module.exports = (err, req, res, next) => {
   const jwtErrors = ['TokenExpiredError', 'JsonWebTokenError', 'NotBeforeError'];
   if (jwtErrors.includes(err.name)) return handleJwtErrors(err, res);
 
+  // Handle bad request errors
+  if (err.name === 'BadRequestError') return handleBadRequestError(err, res);
+
+  // Handle unauthorized errors
+  if (err.name === 'UnauthorizedError') return handleUnauthorizedError(err, res);
+
+  // Handle not found errors
+  if (err.name === 'NotFoundError') return handleNotFoundError(err, res);
+
+  // Handle not found errors
+  if (err.name === 'TooManyRequestError') return handleTooManyRequestError(err, res);
+
   // Pass error to server error handler
   next(err);
 };
@@ -40,3 +52,24 @@ const handleJwtErrors = (err, res) => {
       break;
   }
 };
+
+const handleBadRequestError = (err, res) => {
+  res.status(400);
+  res.send({code: 400, title: 'Bad Request', message: err.message});
+};
+
+const handleUnauthorizedError = (err, res) => {
+  res.status(401);
+  res.send({code: 401, title: 'Unauthorized', message: err.message});
+};
+
+const handleNotFoundError = (err, res) => {
+  res.status(404);
+  res.send({code: 404, title: 'Not Found', message: err.message});
+};
+
+const handleTooManyRequestError = (err, res) => {
+  res.status(429);
+  res.send({code: 429, title: 'Too Many Request', message: err.message});
+};
+
