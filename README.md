@@ -47,3 +47,4 @@ $ npm run start
 - [ ] Add login and logout logs
 - [x] Add request logger
 - [ ] Add documantation for pagination and endpoints
+- [ ] Add role based access control
