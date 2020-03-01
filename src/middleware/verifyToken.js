@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 module.exports = (req, res, next) => {
   const token = req.headers['x-access-token'];
-  const {JWT_ACCESS_TOKEN_SECRET} = process.env;
   if (typeof token !== 'undefined') {
-    jwt.verify(token, JWT_ACCESS_TOKEN_SECRET, (err, decoded) => {
+    jwt.verify(token, config.secrets.jwt.access, (err, decoded) => {
       if (err) return next(err);
 
       if (req.params.username) {

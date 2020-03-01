@@ -5,6 +5,7 @@ const {RateLimiterMongo} = require('rate-limiter-flexible');
 const requestIp = require('request-ip');
 const to = require('await-to-js').default;
 const ex = require('../../exceptions');
+const config = require('../../config');
 const {password: pw} = require('../../lib');
 
 const maxWrongAttemptsByIPperDay = 100;
@@ -111,19 +112,12 @@ exports.logout = (req, res, next) => {
 exports.create_a_token = (req, res, next) => {
   const {username} = req;
 
-  const {
-    JWT_ACCESS_TOKEN_SECRET,
-    JWT_REFRESH_TOKEN_SECRET,
-    JWT_ACCESS_TOKEN_LIFE,
-    JWT_REFRESH_TOKEN_LIFE,
-  } = process.env;
-
-  const accessTokenOptions = {expiresIn: JWT_ACCESS_TOKEN_LIFE};
-  const refreshTokenOptions = {expiresIn: JWT_REFRESH_TOKEN_LIFE};
+  const accessTokenOptions = {expiresIn: config.jwt.access_token_life};
+  const refreshTokenOptions = {expiresIn: config.jwt.refresh_token_life};
 
   // create a access token
-  const accessToken = jwt.sign({username}, JWT_ACCESS_TOKEN_SECRET, accessTokenOptions);
-  const refreshToken = jwt.sign({username}, JWT_REFRESH_TOKEN_SECRET, refreshTokenOptions);
+  const accessToken = jwt.sign({username}, config.secrets.jwt.access, accessTokenOptions);
+  const refreshToken = jwt.sign({username}, config.secrets.jwt.refresh, refreshTokenOptions);
 
   res.set('X-Access-Token', accessToken);
   res.set('X-Refresh-Token', refreshToken);

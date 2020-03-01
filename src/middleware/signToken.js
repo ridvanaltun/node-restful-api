@@ -1,21 +1,15 @@
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 module.exports = (req, res, next) => {
   const {username} = req.body;
 
-  const {
-    JWT_ACCESS_TOKEN_SECRET,
-    JWT_REFRESH_TOKEN_SECRET,
-    JWT_ACCESS_TOKEN_LIFE,
-    JWT_REFRESH_TOKEN_LIFE,
-  } = process.env;
-
-  const accessTokenOptions = {expiresIn: JWT_ACCESS_TOKEN_LIFE};
-  const refreshTokenOptions = {expiresIn: JWT_REFRESH_TOKEN_LIFE};
+  const accessTokenOptions = {expiresIn: config.jwt.access_token_life};
+  const refreshTokenOptions = {expiresIn: config.jwt.refresh_token_life};
 
   // create a access token
-  const accessToken = jwt.sign({username}, JWT_ACCESS_TOKEN_SECRET, accessTokenOptions);
-  const refreshToken = jwt.sign({username}, JWT_REFRESH_TOKEN_SECRET, refreshTokenOptions);
+  const accessToken = jwt.sign({username}, config.secrets.jwt.access, accessTokenOptions);
+  const refreshToken = jwt.sign({username}, config.secrets.jwt.refresh, refreshTokenOptions);
 
   req.token = {
     access: accessToken,

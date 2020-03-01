@@ -1,3 +1,5 @@
+const config = require('../config');
+
 /**
  * Paginate value
  *
@@ -8,10 +10,8 @@
  * @param {callback} cb
  */
 module.exports = (model, name, req, query, cb) => {
-  const {PAGINATION_DEFAULT_LIMIT} = process.env;
-
   // set queries
-  const limit = req.query.limit || parseInt(PAGINATION_DEFAULT_LIMIT, 10);
+  const limit = req.query.limit || parseInt(config.pagination.limit, 10);
   const page = req.query.page || 1;
   const select = req.query.select;
   const sort = req.query.sort_order;

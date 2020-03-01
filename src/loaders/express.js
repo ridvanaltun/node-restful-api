@@ -6,6 +6,7 @@ const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
+const config = require('../config');
 
 module.exports = async ({app, agenda}) => {
   /**
@@ -76,8 +77,9 @@ module.exports = async ({app, agenda}) => {
    */
 
   // log requests
-  const {REQUEST_LOGGER_ENABLE, REQUEST_LOGGER_RETURN_ID} = process.env;
-  if (REQUEST_LOGGER_ENABLE) app.use(middleware.requestLogger(REQUEST_LOGGER_RETURN_ID));
+  if (config.request_logs.enable) {
+    app.use(middleware.requestLogger(config.request_logs.return_id_enable));
+  }
 
   // node.js logger
   // normalde bu kütüphaneyi sadece import ederek kullanabiliyoruz

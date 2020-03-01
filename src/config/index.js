@@ -13,6 +13,9 @@ module.exports = {
     port: parseInt(process.env.APP_PORT, 10) || 3000,
     environment: process.env.NODE_ENV,
   },
+  pagination: {
+    limit: process.env.PAGINATION_DEFAULT_LIMIT,
+  },
   mongo: {
     host: process.env.MONGODB_URI,
     name: process.env.MONGODB_NAME,
@@ -21,8 +24,8 @@ module.exports = {
     level: process.env.LOG_LEVEL || 'silly',
   },
   request_logs: {
-    enable: process.env.REQUEST_LOGGER_ENABLE,
-    return_id: process.env.REQUEST_LOGGER_RETURN_ID,
+    enable: process.env.REQUEST_LOGGER_ENABLE == 'true',
+    return_id_enable: process.env.REQUEST_LOGGER_RETURN_ID_ENABLE == 'true',
   },
   secrets: {
     jwt: {
@@ -39,6 +42,6 @@ module.exports = {
     prefix: '/api',
   },
   agenda: {
-    name: process.env.AGENDA_DB_NAME,
+    db_name: process.env.AGENDA_DB_NAME,
   },
 };

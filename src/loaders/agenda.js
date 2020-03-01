@@ -1,9 +1,9 @@
 const Agenda = require('agenda');
 const agendash = require('agendash');
+const config = require('../config');
 
 module.exports = () => {
-  const {MONGODB_URI, AGENDA_DB_NAME} = process.env;
-  const MONGODB_ADDRESS = `${MONGODB_URI}/${AGENDA_DB_NAME}`;
+  const MONGODB_ADDRESS = `${config.mongo.host}/${config.agenda.db_name}`;
   const options = {
     // useUnifiedTopology: true,
   };

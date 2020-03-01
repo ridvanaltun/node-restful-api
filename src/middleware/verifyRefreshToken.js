@@ -1,10 +1,10 @@
 const jwt = require('jsonwebtoken');
+const config = require('../config');
 
 module.exports = (req, res, next) => {
   const token = req.headers['x-refresh-token'];
-  const {JWT_REFRESH_TOKEN_SECRET} = process.env;
   if (typeof token !== 'undefined') {
-    jwt.verify(token, JWT_REFRESH_TOKEN_SECRET, (err, decoded) => {
+    jwt.verify(token, config.secrets.jwt.refresh, (err, decoded) => {
       if (err) return next(err);
       req.username = decoded.username;
       next();
