@@ -1,6 +1,6 @@
 const APP_MODES = {
-  PROD: 'production',
-  DEV: 'development',
+  PROD: 'PRODUCTION',
+  DEV: 'DEVELOPMENT',
 };
 
 const USER_ROLES = {

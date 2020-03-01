@@ -43,7 +43,7 @@ $ npm run start
 - [x] Add cron jobs manager (Agenda)
 - [ ] Add API versioning
 - [x] Add pagination
-- [ ] Run server with environment (dev, prod)
+- [x] Run server with environment (dev, prod)
 - [ ] Add login and logout logs
 - [x] Add request logger
 - [ ] Add documantation for pagination and endpoints

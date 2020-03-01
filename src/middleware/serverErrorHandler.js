@@ -1,7 +1,7 @@
 const ENUMS = require('../enums');
-const {APP_ENV} = process.env;
+const config = require('../config');
 
-const isDev = APP_ENV === ENUMS.APP_MODES.DEV;
+const isDev = config.app.environment === ENUMS.APP_MODES.DEV;
 
 // Server error handler
 module.exports = (err, req, res, next) => {
