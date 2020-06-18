@@ -9,7 +9,10 @@ module.exports = async () => {
   mongoose.set('useCreateIndex', true);
   mongoose.set('useFindAndModify', false);
 
-  const MONGODB_ADDRESS = `${config.mongo.host}/${config.mongo.name}`;
+  const {host, port, db_name: dbName, username, password} = config.mongo;
+
+  const MONGODB_ADDRESS =
+    `mongodb://${username}:${password}@${host}:${port}/${dbName}?authSource=admin`;
   const connection = await mongoose.connect(MONGODB_ADDRESS);
 
   return connection.connection.db;

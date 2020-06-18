@@ -10,18 +10,23 @@ if (!envFound) {
 module.exports = {
   app: {
     name: process.env.APP_NAME,
-    port: parseInt(process.env.APP_PORT, 10) || 3000,
+    port: parseInt(process.env.APP_PORT, 10),
     environment: process.env.NODE_ENV,
   },
   pagination: {
     limit: process.env.PAGINATION_DEFAULT_LIMIT,
   },
   mongo: {
-    host: process.env.MONGODB_URI,
-    name: process.env.MONGODB_NAME,
+    host: process.env.MONGO_HOST,
+    port: parseInt(process.env.MONGO_PORT, 10),
+    db_name: process.env.MONGO_DATABASE,
+    admin_username: process.env.MONGO_INITDB_ROOT_USERNAME,
+    admin_password: process.env.MONGO_INITDB_ROOT_PASSWORD,
+    username: process.env.MONGO_USERNAME,
+    password: process.env.MONGO_PASSWORD,
   },
   logs: {
-    level: process.env.LOG_LEVEL || 'silly',
+    level: process.env.LOG_LEVEL,
   },
   request_logs: {
     enable: process.env.REQUEST_LOGGER_ENABLE == 'true',
@@ -42,6 +47,6 @@ module.exports = {
     prefix: '/api',
   },
   agenda: {
-    db_name: process.env.AGENDA_DB_NAME,
+    db_name: process.env.AGENDA_DATABASE,
   },
 };

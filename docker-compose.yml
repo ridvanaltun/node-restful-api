@@ -1,0 +1,17 @@
+version: "3.8"
+volumes:
+  node-app-database-data:
+    external: true
+services:
+  node-app-database:
+    image: mongo:3.4.2
+    container_name: node-app-database
+    command: [--auth]
+    env_file:
+      - .env
+    ports:
+      - ${MONGO_PORT}:${MONGO_PORT}
+    volumes:
+      - node-app-database-data:/data/db
+      - ./mongo-scripts/:/docker-entrypoint-initdb.d
+    restart: always
