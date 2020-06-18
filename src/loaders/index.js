@@ -1,4 +1,4 @@
-const Logger = require('./logger');
+const {Logger} = require('../utils');
 const loadModels = require('../models');
 const mongooseLoader = require('./mongoose');
 const agendaLoader = require('./agenda');

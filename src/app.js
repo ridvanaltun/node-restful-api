@@ -1,5 +1,5 @@
 const express = require('express');
-const Logger = require('./loaders/logger');
+const {Logger} = require('./utils');
 const config = require('./config');
 const loader = require('./loaders');
 
