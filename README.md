@@ -1,8 +1,8 @@
-# node-restful-api
+# Node RESTful API
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-## What i used?
+## Technical Stuff
 
 - NodeJS
 - MongoDB
@@ -26,6 +26,20 @@ $ npm install
 
 # create global volume for MongoDB
 $ docker volume create --name=node-app-database-data
+
+# create your own environment file
+$ cp .env.example .env
+```
+
+### Customize Your Environment File
+
+Don't forget customize your environment file.
+
+##### JWT_REFRESH_TOKEN_SECRET and JWT_ACCESS_TOKEN_SECRET
+
+```bash
+# generate jwt secrets, refresh token and access token can not be same
+$ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
 ## Usage
@@ -55,3 +69,4 @@ $ npm run start
 - [x] Add request logger
 - [ ] Add documantation for pagination and endpoints
 - [ ] Add role based access control
+- [ ] Add auto semantic release with a CI/CD tool
