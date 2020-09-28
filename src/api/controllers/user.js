@@ -23,6 +23,8 @@ exports.create_a_user = async (req, res, next) => {
     });
     // save the user
     newUser.save((err, user) => {
+      if (err) return next(err);
+
       res.set('X-Access-Token', access);
       res.set('X-Refresh-Token', refresh);
 

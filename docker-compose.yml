@@ -4,14 +4,14 @@ volumes:
     external: true
 services:
   node-app-database:
-    image: mongo:3.4.2
+    image: mongo:4.4.1
     container_name: node-app-database
     command: [--auth]
     env_file:
       - .env
     ports:
-      - ${MONGO_PORT}:${MONGO_PORT}
+      - ${MONGO_PORT}:27017
     volumes:
       - node-app-database-data:/data/db
-      - ./mongo-scripts/:/docker-entrypoint-initdb.d
+      - ./docker/mongo/docker-entrypoint-initdb.d/:/docker-entrypoint-initdb.d
     restart: always

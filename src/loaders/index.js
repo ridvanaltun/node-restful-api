@@ -8,7 +8,7 @@ module.exports = async ({expressApp}) => {
   loadModels();
   Logger.info('✔️  Models loaded!');
 
-  mongooseLoader();
+  await mongooseLoader();
   Logger.info('✔️  DB loaded and connected!');
 
   const agenda = agendaLoader();

@@ -20,6 +20,7 @@ module.exports = {
     host: process.env.MONGO_HOST,
     port: parseInt(process.env.MONGO_PORT, 10),
     db_name: process.env.MONGO_DATABASE,
+    admin_db_name: process.env.MONGO_INITDB_DATABASE,
     admin_username: process.env.MONGO_INITDB_ROOT_USERNAME,
     admin_password: process.env.MONGO_INITDB_ROOT_PASSWORD,
     username: process.env.MONGO_USERNAME,

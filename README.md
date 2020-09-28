@@ -2,6 +2,14 @@
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
+> An example of REST API infrastructure using Node + Express + MongoDB.
+
+## Postman Collection
+
+Test the API with Postman easily.
+
+[![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/0ea613ed27408b21a8e7#?env%5BNode%20REST%20API%5D=W3sia2V5IjoiTk9ERV9BUEkiLCJ2YWx1ZSI6InRydWUiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6ImJhc2UiLCJ2YWx1ZSI6Imh0dHA6Ly9sb2NhbGhvc3Q6MzAwMCIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoiYWNjZXNzVG9rZW4iLCJ2YWx1ZSI6ImV5SmhiR2NpT2lKSVV6STFOaUlzSW5SNWNDSTZJa3BYVkNKOS5leUoxYzJWeWJtRnRaU0k2SW5WelpYSnVZVzFsWVdFaUxDSnBZWFFpT2pFMk1ERXlOakF5T0Rjc0ltVjRjQ0k2TVRZd01USTJNemc0TjMwLkJJc2JEc1BIbUFabmo2SDZaTVN3TmxYeEtMSlNEX2oweXFYaHVPZGtLSG8iLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InJlZnJlc2hUb2tlbiIsInZhbHVlIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SjFjMlZ5Ym1GdFpTSTZJblZ6WlhKdVlXMWxZV0VpTENKcFlYUWlPakUyTURFeU5qQXlPRGNzSW1WNGNDSTZNVFl3TVRJMk56UTROMzAudjZVM05BakIzbG9KUkFPVXZGcEtjckV2LXhHaGN0YjJESFAyeHVFdHI1dyIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoidGFza0lkIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6InVzZXJuYW1lIiwidmFsdWUiOiJ1c2VybmFtZWFhIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYXNzd29yZCIsInZhbHVlIjoicGFzc3dvcmQiLCJlbmFibGVkIjp0cnVlfSx7ImtleSI6ImxvZ0lkIiwidmFsdWUiOiIiLCJlbmFibGVkIjp0cnVlfV0=)
+
 ## Technical Stuff
 
 - NodeJS
@@ -57,7 +65,7 @@ $ npm run start
 - [x] Add JWT (JSON Web Tokens)
 - [x] Add ability to refresh token
 - [ ] Add API documentation (Swagger) generator
-- [ ] Add Postman collection
+- [x] Add Postman collection
 - [x] Add API limitter for security
 - [x] Add Joi and Celebrate support for API validation
 - [x] Add password hashing
