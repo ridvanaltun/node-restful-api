@@ -1,4 +1,3 @@
-/* eslint-disable global-require */
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const logger = require('morgan');
@@ -7,6 +6,8 @@ const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middleware = require('../middleware');
 const config = require('../config');
+const enums = require('../enums');
+const routes = require('../api');
 
 module.exports = async ({app, agenda}) => {
   /**
@@ -103,26 +104,21 @@ module.exports = async ({app, agenda}) => {
    * Handle Routes
    */
 
-  // register routes to app
-  const registerRoutes = require('../api');
-  registerRoutes(app);
-
-  // set agenda
-  app.use('/dash', middleware.verifyToken, middleware.isAdmin, agenda);
+  // load api routes
+  app.use(enums.API_PREFIX, routes());
 
   // api durumu hakkında bilgi döndürmek için kullanıyoruz
   // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
-  app.get('/status', (req, res) => {
-    res.status(200).end();
-  });
-  app.head('/status', (req, res) => {
-    res.status(200).end();
-  });
+  app.route(`${enums.API_PREFIX}/status`)
+      .get((req, res) => {
+        res.status(200).end();
+      })
+      .head((req, res) => {
+        res.status(200).end();
+      });
 
-  // TODO: ADD API INFO
-  // app.get('/api', (req, res) => {
-  //   res.status(200);
-  // });
+  // set agenda
+  app.use('/dash', middleware.verifyToken, middleware.isAdmin, agenda);
 
   /**
    * Error Handling

@@ -1,3 +1,5 @@
+const API_PREFIX = '/api';
+
 const APP_MODES = {
   PROD: 'PRODUCTION',
   DEV: 'DEVELOPMENT',
@@ -27,6 +29,7 @@ const HTTP_METHODS = [
 ];
 
 module.exports = {
+  API_PREFIX,
   APP_MODES,
   USER_ROLES,
   HTTP_METHODS,

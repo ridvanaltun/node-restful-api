@@ -4,7 +4,6 @@ const mongooseLoader = require('./mongoose');
 const agendaLoader = require('./agenda');
 
 module.exports = async ({expressApp}) => {
-  // load models
   loadModels();
   Logger.info('✔️  Models loaded!');
 

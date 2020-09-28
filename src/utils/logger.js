@@ -1,8 +1,9 @@
 const winston = require('winston');
 const config = require('../config');
+const enums = require('../enums');
 
 const transports = [];
-if (config.app.environment !== 'DEVELOPMENT') {
+if (config.app.environment !== enums.APP_MODES.DEV) {
   transports.push(
       new winston.transports.Console(),
   );

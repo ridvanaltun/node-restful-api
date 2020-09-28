@@ -45,7 +45,6 @@ module.exports = {
   },
   api: {
     version: process.env.API_VERSION,
-    prefix: '/api',
   },
   agenda: {
     db_name: process.env.AGENDA_DATABASE,
