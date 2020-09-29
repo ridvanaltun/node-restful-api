@@ -1,6 +1,6 @@
 const express = require('express');
 const {Logger} = require('./utils');
-const config = require('./config');
+const configs = require('./configs');
 const loader = require('./loaders');
 
 /**
@@ -10,7 +10,7 @@ async function startServer() {
   const app = express();
 
   await loader({expressApp: app});
-  const {port} = config.app;
+  const {port} = configs.app;
   app.listen(port, (err) => {
     if (err) {
       Logger.error(err);

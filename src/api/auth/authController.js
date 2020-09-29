@@ -4,8 +4,8 @@ const jwt = require('jsonwebtoken');
 const {RateLimiterMongo} = require('rate-limiter-flexible');
 const requestIp = require('request-ip');
 const to = require('await-to-js').default;
-const ex = require('../../exceptions');
-const config = require('../../config');
+const errors = require('./authError');
+const configs = require('../../configs');
 const {password: pw} = require('../../lib');
 
 const maxWrongAttemptsByIPperDay = 100;
@@ -46,7 +46,7 @@ exports.login = async (req, res, next) => {
     // when api limit exceeded
     if (retrySecs > 0) {
       res.set('Retry-After', String(retrySecs));
-      return next(new ex.TooManyRequestError('Too many wrong login attempts by this ip address'));
+      return next(errors.loginTooManyWrongAttemptsByIpAddress());
     }
   }
 
@@ -56,7 +56,7 @@ exports.login = async (req, res, next) => {
     // when api limit exceeded
     if (retrySecs > 0) {
       res.set('Retry-After', String(retrySecs));
-      return next(new ex.TooManyRequestError('Too many wrong password provided to the user by this ip address'));
+      return next(errors.loginTooManyWrongAttemptsByUserAndIpAddress());
     }
   }
 
@@ -85,10 +85,10 @@ exports.login = async (req, res, next) => {
         if (err) {
           const retrySecs = limiterConsecutiveFailsByUsernameAndIP.blockDuration;
           res.set('Retry-After', String(retrySecs));
-          return next(new ex.TooManyRequestError('Too many wrong password provided to the user by this ip address'));
+          return next(errors.loginTooManyWrongAttemptsByUserAndIpAddress());
         }
 
-        return next(new ex.BadRequestError('Password incorrect'));
+        return next(errors.passwordIncorrect());
       }
     } else {
       // when user not found
@@ -97,10 +97,10 @@ exports.login = async (req, res, next) => {
       if (err) {
         const retrySecs = limiterSlowBruteByIP.blockDuration;
         res.set('Retry-After', String(retrySecs));
-        return next(new ex.TooManyRequestError('Too many wrong login attempts by this ip address'));
+        return next(errors.loginTooManyWrongAttemptsByIpAddress());
       }
 
-      return next(new ex.NotFoundError('User not found'));
+      return next(errors.userNotFound());
     }
   }).select('+password');
 };
@@ -112,12 +112,12 @@ exports.logout = (req, res, next) => {
 exports.create_a_token = (req, res, next) => {
   const {username} = req;
 
-  const accessTokenOptions = {expiresIn: config.jwt.access_token_life};
-  const refreshTokenOptions = {expiresIn: config.jwt.refresh_token_life};
+  const accessTokenOptions = {expiresIn: configs.jwt.access_token_life};
+  const refreshTokenOptions = {expiresIn: configs.jwt.refresh_token_life};
 
   // create a access token
-  const accessToken = jwt.sign({username}, config.secrets.jwt.access, accessTokenOptions);
-  const refreshToken = jwt.sign({username}, config.secrets.jwt.refresh, refreshTokenOptions);
+  const accessToken = jwt.sign({username}, configs.secrets.jwt.access, accessTokenOptions);
+  const refreshToken = jwt.sign({username}, configs.secrets.jwt.refresh, refreshTokenOptions);
 
   res.set('X-Access-Token', accessToken);
   res.set('X-Refresh-Token', refreshToken);

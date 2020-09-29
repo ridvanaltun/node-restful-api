@@ -1,5 +1,5 @@
 /**
- * Common validations
+ * Common validators
  */
 
 const {celebrate, Joi, Segments} = require('celebrate');

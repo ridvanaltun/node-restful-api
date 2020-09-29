@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const config = require('../config');
+const configs = require('../configs');
 
 module.exports = async () => {
   const {
@@ -9,7 +9,7 @@ module.exports = async () => {
     username,
     password,
     admin_db_name: adminDbName,
-  } = config.mongo;
+  } = configs.mongo;
 
   const MONGODB_ADDRESS =
     `mongodb://${username}:${password}@${host}:${port}/${dbName}?authSource=${adminDbName}`;

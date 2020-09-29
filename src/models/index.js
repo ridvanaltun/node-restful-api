@@ -1,7 +1,7 @@
 /* eslint-disable global-require */
 
 module.exports = () => {
-  require('./todo');
+  require('./task');
   require('./user');
   require('./request');
 };

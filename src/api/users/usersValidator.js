@@ -11,11 +11,20 @@ exports.create_a_user = celebrate({
   }),
 });
 
+
 exports.update_a_user = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    first_name: Joi.string(),
+    last_name: Joi.string(),
+  }),
+});
+
+
+exports.update_password = celebrate({
   [Segments.BODY]: Joi.object().keys({
     password: Joi.string().min(8).max(30).regex(/[a-zA-Z0-9]{3,30}/)
         .required(),
-    first_name: Joi.string().required(),
-    last_name: Joi.string().required(),
+    new_password: Joi.string().min(8).max(30).regex(/[a-zA-Z0-9]{3,30}/)
+        .required(),
   }),
 });

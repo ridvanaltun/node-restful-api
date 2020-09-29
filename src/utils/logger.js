@@ -1,9 +1,9 @@
 const winston = require('winston');
-const config = require('../config');
+const configs = require('../configs');
 const enums = require('../enums');
 
 const transports = [];
-if (config.app.environment !== enums.APP_MODES.DEV) {
+if (configs.app.environment !== enums.APP.MODES.DEV) {
   transports.push(
       new winston.transports.Console(),
   );
@@ -19,7 +19,7 @@ if (config.app.environment !== enums.APP_MODES.DEV) {
 }
 
 const LoggerInstance = winston.createLogger({
-  level: config.logs.level,
+  level: configs.logs.level,
   levels: winston.config.npm.levels,
   format: winston.format.combine(
       winston.format.timestamp({

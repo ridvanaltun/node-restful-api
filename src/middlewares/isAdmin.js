@@ -1,5 +1,5 @@
 const User = require('mongoose').model('User');
-const ex = require('../exceptions');
+const createError = require('http-errors');
 
 const {USER_ROLES} = require('../enums');
 
@@ -12,6 +12,6 @@ module.exports = (req, res, next) => {
 
     if (IS_ADMIN) return next();
 
-    next(new ex.UnauthorizedError('Only users at the administrative level can access'));
+    next(createError.Unauthorized('Only users at the administrative level can access'));
   });
 };

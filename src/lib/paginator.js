@@ -1,4 +1,6 @@
-const config = require('../config');
+// todo: remove paginator.js, use instead paginateQueryMongoose.js
+
+const configs = require('../configs');
 
 /**
  * Paginate value
@@ -11,7 +13,7 @@ const config = require('../config');
  */
 module.exports = (model, name, req, query, cb) => {
   // set queries
-  const limit = req.query.limit || parseInt(config.pagination.limit, 10);
+  const limit = req.query.limit || parseInt(configs.pagination.limit, 10);
   const page = req.query.page || 1;
   const select = req.query.select;
   const sort = req.query.sort_order;

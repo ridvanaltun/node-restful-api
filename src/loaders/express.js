@@ -4,8 +4,8 @@ const logger = require('morgan');
 const cookieParser = require('cookie-parser');
 const {errors} = require('celebrate');
 const helmet = require('helmet');
-const middleware = require('../middleware');
-const config = require('../config');
+const middlewares = require('../middlewares');
+const configs = require('../configs');
 const enums = require('../enums');
 const routes = require('../api');
 
@@ -33,11 +33,11 @@ module.exports = async ({app, agenda}) => {
   app.use(helmet());
 
   // ignore favicon
-  app.use(middleware.ignoreFavicon);
+  app.use(middlewares.ignoreFavicon);
 
   // remove empty properties from body, query and params
   // in this way we don't worry about the incomming data was empty or not
-  app.use(middleware.removeEmptyProperties());
+  app.use(middlewares.removeEmptyProperties());
 
   /**
    * Global Limitters
@@ -52,7 +52,7 @@ module.exports = async ({app, agenda}) => {
     duration: 1, // Per second(s)
   };
 
-  app.use(middleware.rateLimitterMongo(globalRateLimitOptions));
+  app.use(middlewares.rateLimitterMongo(globalRateLimitOptions));
 
   /**
    * Parsing
@@ -78,8 +78,8 @@ module.exports = async ({app, agenda}) => {
    */
 
   // log requests
-  if (config.request_logs.enable) {
-    app.use(middleware.requestLogger(config.request_logs.return_id_enable));
+  if (configs.request_logs.enable) {
+    app.use(middlewares.requestLogger(configs.request_logs.return_id_enable));
   }
 
   // node.js logger
@@ -105,11 +105,11 @@ module.exports = async ({app, agenda}) => {
    */
 
   // load api routes
-  app.use(enums.API_PREFIX, routes());
+  app.use(enums.API.PREFIX, routes());
 
   // api durumu hakkında bilgi döndürmek için kullanıyoruz
   // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
-  app.route(`${enums.API_PREFIX}/status`)
+  app.route(`${enums.API.PREFIX}/status`)
       .get((req, res) => {
         res.status(200).end();
       })
@@ -118,26 +118,26 @@ module.exports = async ({app, agenda}) => {
       });
 
   // set agenda
-  app.use('/dash', middleware.verifyToken, middleware.isAdmin, agenda);
+  app.use('/dash', middlewares.verifyToken, middlewares.isAdmin, agenda);
 
   /**
    * Error Handling
    */
 
   // log errors
-  app.use(middleware.logErrors);
+  app.use(middlewares.logErrors);
 
   // handle celebrate errors
   app.use(errors());
 
   // 404
-  app.use(middleware.notFoundHandler);
+  app.use(middlewares.notFoundHandler);
 
   // handle client errors
-  app.use(middleware.clientErrorHandler);
+  app.use(middlewares.clientErrorHandler);
 
   // handle server errors
-  app.use(middleware.serverErrorHandler);
+  app.use(middlewares.serverErrorHandler);
 
   return app;
 };

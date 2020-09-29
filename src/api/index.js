@@ -1,17 +1,19 @@
-const {Router: router} = require('express');
-const todo = require('./routes/todo');
-const user = require('./routes/user');
-const auth = require('./routes/auth');
-const log = require('./routes/log');
+const express = require('express');
+
+// resources
+const auth = require('./auth');
+const users = require('./users');
+const tasks = require('./tasks');
+const logs = require('./logs');
 
 module.exports = () => {
-  const app = router();
+  const app = express.Router();
 
   // register routes
-  todo(app);
-  user(app);
-  auth(app);
-  log(app);
+  app.use('/auth', auth.routers());
+  app.use('/users', users.routers());
+  app.use('/tasks', tasks.routers());
+  app.use('/logs', logs.routers());
 
   return app;
 };

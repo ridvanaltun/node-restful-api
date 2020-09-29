@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const {RateLimiterMongo} = require('rate-limiter-flexible');
 const requestIp = require('request-ip');
-const ex = require('../exceptions');
+const createError = require('http-errors');
 
 const mongoConn = mongoose.connection;
 
@@ -30,7 +30,7 @@ module.exports = (options) => {
 
           res.set('Retry-After', String(retrySecs));
 
-          next(new ex.TooManyRequestError(message));
+          next(createError.TooManyRequests(message));
         });
   };
 };
