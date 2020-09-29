@@ -53,12 +53,14 @@ $ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ## Usage
 
 ```bash
-# start MongoDB
+# start MongoDB and Mogoku (MongoDB Collection Viewer)
 $ docker-compose up -d
 
 # start NodeJS server on 3000
 $ npm run start
 ```
+
+`MongoDB` run at 27017 and `Mogoku` run at 3100 as default.
 
 ## To:Do
 
