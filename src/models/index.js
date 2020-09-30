@@ -4,4 +4,5 @@ module.exports = () => {
   require('./task');
   require('./user');
   require('./request');
+  require('./activationCode');
 };

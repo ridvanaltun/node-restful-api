@@ -1,6 +1,6 @@
 const errors = require('./usersError');
 const {UserService} = require('../../services');
-const lib = require('../../lib');
+const {hash, compare} = require('../../utils/bcrypt');
 
 const service = new UserService();
 
@@ -17,7 +17,7 @@ exports.create_a_user = async (req, res, next) => {
   const {access, refresh} = req.token;
 
   // hash password
-  const hashedPassword = await lib.password.hashPassword(req.body.password);
+  const hashedPassword = await hash(req.body.password);
 
   const {user, error} = await service.create({...req.body, password: hashedPassword});
 
@@ -73,6 +73,7 @@ exports.delete_a_user = async (req, res, next) => {
   res.status(204).end();
 };
 
+// todo: add email verification
 exports.update_password = async (req, res, next) => {
   const {username} = req.params;
   const {password, new_password: newPassword} = req.body;
@@ -81,13 +82,13 @@ exports.update_password = async (req, res, next) => {
   if (username !== req.user.username) return next(errors.userUnauthorized());
 
   // validate password
-  const validated = await lib.password.validatePassword(password, req.user.password);
+  const validated = await compare(password, req.user.password);
 
   // password not valid
   if (!validated) return next(errors.userPasswordWrong());
 
   // hash new password
-  const hashedNewPassword = await lib.password.hashPassword(newPassword);
+  const hashedNewPassword = await hash(newPassword);
 
   const {user, error} = await service.changePassword(username, hashedNewPassword);
 

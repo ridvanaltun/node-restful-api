@@ -43,22 +43,43 @@ $ cp .env.example .env
 
 Don't forget customize your environment file.
 
-##### JWT_REFRESH_TOKEN_SECRET and JWT_ACCESS_TOKEN_SECRET
+- *JWT_REFRESH_TOKEN_SECRET* and *JWT_ACCESS_TOKEN_SECRET*
 
 ```bash
 # generate jwt secrets, refresh token and access token can not be same
 $ node -e "console.log(require('crypto').randomBytes(64).toString('hex'))"
 ```
 
+- *EMAIL_HOST*, *EMAIL_HOST_USER*, *EMAIL_HOST_PASSWORD* and *EMAIL_PORT*
+
+```
+For email variables you can create a fake SMTP server using [Mailtrap](https://mailtrap.io/) for development purposes.
+With Mailtrap all emails automatically forward to your Mailtrap inbox.
+```
+
+- *EMAIL_ADDRESS_NO_REPLY*
+
+```
+The activation code is sent by this email address.
+```
+
+- *FRONTEND_ADDRESS*, *FRONTEND_EMAIL_VERIFICATION_PATH* and *FRONTEND_LOGO_URL*
+
+```
+These configuration variables are using by activation email.
+```
+
 ## Usage
 
 ```bash
-# start MongoDB
+# start MongoDB and Mogoku (MongoDB Collection Viewer)
 $ docker-compose up -d
 
 # start NodeJS server on 3000
 $ npm run start
 ```
+
+`MongoDB` run at 27017 and `Mogoku` run at 3100 as default.
 
 ## To:Do
 

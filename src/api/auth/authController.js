@@ -1,4 +1,5 @@
 const User = require('mongoose').model('User');
+const {AuthService} = require('../../services');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const {RateLimiterMongo} = require('rate-limiter-flexible');
@@ -6,7 +7,9 @@ const requestIp = require('request-ip');
 const to = require('await-to-js').default;
 const errors = require('./authError');
 const configs = require('../../configs');
-const {password: pw} = require('../../lib');
+const {compare} = require('../../utils/bcrypt');
+
+const service = new AuthService();
 
 const maxWrongAttemptsByIPperDay = 100;
 const maxConsecutiveFailsByUsernameAndIP = 12;
@@ -64,7 +67,7 @@ exports.login = async (req, res, next) => {
     if (err) return next(err);
     if (user) {
       // validate password
-      const isPasswordCorrect = await pw.validatePassword(password, user.password);
+      const isPasswordCorrect = await compare(password, user.password);
 
       // hide password after validation
       user.password = undefined;
@@ -106,7 +109,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.logout = (req, res, next) => {
-  // TODO: ADD LOGIC
+  // todo: add logic
 };
 
 exports.create_a_token = (req, res, next) => {
@@ -122,4 +125,24 @@ exports.create_a_token = (req, res, next) => {
   res.set('X-Access-Token', accessToken);
   res.set('X-Refresh-Token', refreshToken);
   res.end();
+};
+
+exports.activate_email = async (req, res, next) => {
+  const {uid, token} = req.body;
+
+  const isLinkValid = await service.validateActivationLink(uid, token);
+
+  if (!isLinkValid) return next(errors.activationLinkNotValid());
+
+  res.status(200).end();
+};
+
+exports.activate_email_resend = async (req, res, next) => {
+  const {email} = req.body;
+
+  const isResendSuccess = await service.resendActivationEmail(email);
+
+  if (!isResendSuccess) return next(errors.resendEmailNotSuccess());
+
+  res.status(200).end();
 };
