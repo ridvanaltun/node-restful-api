@@ -32,6 +32,10 @@ const userSchema = new Schema({
     enum: ['user', 'admin'],
     default: 'user',
   },
+  email_verified: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 // pagination support

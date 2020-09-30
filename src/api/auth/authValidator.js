@@ -19,3 +19,16 @@ exports.create_a_token = celebrate({
     'x-refresh-token': Joi.string().required(),
   }).unknown(),
 });
+
+exports.activate_email = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    uid: Joi.string().required(),
+    token: Joi.string().required(),
+  }),
+});
+
+exports.activate_email_resend = celebrate({
+  [Segments.BODY]: Joi.object().keys({
+    email: Joi.string().email().required(),
+  }),
+});

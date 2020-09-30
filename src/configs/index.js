@@ -49,4 +49,21 @@ module.exports = {
   agenda: {
     db_name: process.env.AGENDA_DATABASE,
   },
+  email: {
+    smtp: {
+      host: process.env.EMAIL_HOST,
+      user: process.env.EMAIL_HOST_USER,
+      password: process.env.EMAIL_HOST_PASSWORD,
+      port: process.env.EMAIL_PORT,
+    },
+    address: {
+      no_reply: process.env.EMAIL_ADDRESS_NO_REPLY,
+    },
+    password_activation_timeout: process.env.PASSWORD_ACTIVATION_TIMEOUT,
+  },
+  frontend: {
+    address: process.env.FRONTEND_ADDRESS,
+    email_verification_path: process.env.FRONTEND_EMAIL_VERIFICATION_PATH,
+    logo_url: process.env.FRONTEND_LOGO_URL,
+  },
 };
