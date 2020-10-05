@@ -13,11 +13,11 @@ exports.list_all_users = async (req, res, next) => {
 
 
 exports.create_a_user = async (req, res, next) => {
-  const {access, refresh} = req.token;
-
   const {user, error} = await service.create({...req.body});
 
   if (error) return next(error);
+
+  const {access, refresh} = user.generateJWT();
 
   // bind tokens to response
   res.set('X-Access-Token', access);

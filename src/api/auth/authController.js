@@ -32,7 +32,6 @@ const limiterConsecutiveFailsByUsernameAndIP = new RateLimiterMongo({
 const getUsernameIPkey = (username, ip) => `${username}_${ip}`;
 
 exports.login = async (req, res, next) => {
-  const {access, refresh} = req.token;
   const {username, password} = req.body;
 
   const ipAddr = requestIp.getClientIp(req);
@@ -73,6 +72,9 @@ exports.login = async (req, res, next) => {
         if (!!resUsernameAndIP && resUsernameAndIP.consumedPoints > 0) {
           await limiterConsecutiveFailsByUsernameAndIP.delete(usernameIPkey);
         }
+
+        const {access, refresh} = user.generateJWT();
+
         // give tokens
         res.set('X-Access-Token', access);
         res.set('X-Refresh-Token', refresh);

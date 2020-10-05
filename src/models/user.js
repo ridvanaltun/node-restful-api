@@ -2,6 +2,11 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+
+// configs
+const {access, refresh} = require('../configs').secrets.jwt;
+const {access_token_life, refresh_token_life} = require('../configs').jwt;
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -82,5 +87,12 @@ userSchema.methods.toProfileJSON = function() {
   };
 };
 
+// generates jwt token
+userSchema.methods.generateJWT = function() {
+  return {
+    access: jwt.sign({username: this.username}, access, {expiresIn: access_token_life}),
+    refresh: jwt.sign({username: this.username}, refresh, {expiresIn: refresh_token_life}),
+  };
+};
 
 module.exports = mongoose.model('User', userSchema);

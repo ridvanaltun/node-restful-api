@@ -6,7 +6,6 @@ const notFoundHandler = require('./notFoundHandler');
 const logErrors = require('./logErrors');
 const verifyToken = require('./verifyToken');
 const verifyRefreshToken = require('./verifyRefreshToken');
-const signToken = require('./signToken');
 const removeEmptyProperties = require('./removeEmptyProperties');
 const requestLogger = require('./requestLogger');
 const rateLimitterMongo = require('./rateLimitterMongo');
@@ -20,7 +19,6 @@ module.exports = {
   logErrors,
   verifyToken,
   verifyRefreshToken,
-  signToken,
   removeEmptyProperties,
   requestLogger,
   rateLimitterMongo,

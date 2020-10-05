@@ -8,7 +8,7 @@ const users = express.Router();
 
 users.route('/')
     .get(common.validators.pagination, handle.list_all_users)
-    .post(validators.create_a_user, middlewares.signToken, handle.create_a_user);
+    .post(validators.create_a_user, handle.create_a_user);
 
 users.route('/:username')
     .get(handle.read_a_user)

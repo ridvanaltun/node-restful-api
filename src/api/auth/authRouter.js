@@ -6,7 +6,7 @@ const middlewares = require('../../middlewares');
 const auth = express.Router();
 
 auth.route('/login')
-    .post(validator.login, middlewares.signToken, handle.login);
+    .post(validator.login, handle.login);
 
 auth.route('/logout')
     .post(validator.logout, handle.logout);
