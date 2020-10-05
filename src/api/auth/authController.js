@@ -7,7 +7,6 @@ const requestIp = require('request-ip');
 const to = require('await-to-js').default;
 const errors = require('./authError');
 const configs = require('../../configs');
-const {compare} = require('../../utils/bcrypt');
 
 const service = new AuthService();
 
@@ -67,7 +66,7 @@ exports.login = async (req, res, next) => {
     if (err) return next(err);
     if (user) {
       // validate password
-      const isPasswordCorrect = await compare(password, user.password);
+      const isPasswordCorrect = await user.isPasswordCorrect(password);
 
       // hide password after validation
       user.password = undefined;

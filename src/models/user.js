@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const uniqueValidator = require('mongoose-unique-validator');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -55,5 +56,15 @@ userSchema.plugin(uniqueValidator, {message: '{PATH} is already taken.'});
 
 // this will add created_at and updated_at timestamps
 userSchema.set('timestamps', {createdAt: 'created_at', updatedAt: 'updated_at'});
+
+// check password is correct or not
+userSchema.methods.isPasswordCorrect = async function(password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+// set user password
+userSchema.methods.setPassword = async function(password) {
+  this.password = await bcrypt.hash(password, 10);
+};
 
 module.exports = mongoose.model('User', userSchema);

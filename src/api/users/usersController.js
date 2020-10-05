@@ -1,6 +1,5 @@
 const errors = require('./usersError');
 const {UserService} = require('../../services');
-const {hash, compare} = require('../../utils/bcrypt');
 
 const service = new UserService();
 
@@ -16,10 +15,7 @@ exports.list_all_users = async (req, res, next) => {
 exports.create_a_user = async (req, res, next) => {
   const {access, refresh} = req.token;
 
-  // hash password
-  const hashedPassword = await hash(req.body.password);
-
-  const {user, error} = await service.create({...req.body, password: hashedPassword});
+  const {user, error} = await service.create({...req.body});
 
   if (error) return next(error);
 
@@ -82,15 +78,12 @@ exports.update_password = async (req, res, next) => {
   if (username !== req.user.username) return next(errors.userUnauthorized());
 
   // validate password
-  const validated = await compare(password, req.user.password);
+  const isPasswordCorrect = await req.user.isPasswordCorrect(password);
 
-  // password not valid
-  if (!validated) return next(errors.userPasswordWrong());
+  // password not correct
+  if (!isPasswordCorrect) return next(errors.userPasswordWrong());
 
-  // hash new password
-  const hashedNewPassword = await hash(newPassword);
-
-  const {user, error} = await service.changePassword(username, hashedNewPassword);
+  const {user, error} = await service.changePassword(username, newPassword);
 
   if (error) return next(error);
 

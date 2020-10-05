@@ -53,7 +53,9 @@ class UserService {
   async create(body) {
     try {
       // create user
-      const user = await new User(body).save();
+      const user = new User(body);
+      await user.setPassword(body.password);
+      await user.save();
 
       // create activation code
       const authClient = new AuthService();
@@ -114,11 +116,13 @@ class UserService {
    * @param   {string}  newPassword   New password
    *
    * @return  {object}                User
-   * @throws {Error}
+   * @throws  {Error}
    */
   async changePassword(username, newPassword) {
     try {
-      const user = await User.findOneAndUpdate({username}, {password: newPassword});
+      const user = await User.findOne({username});
+      await user.setPassword(newPassword);
+      await user.save();
       return {user};
     } catch (error) {
       return {error};

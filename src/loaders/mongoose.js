@@ -18,6 +18,6 @@ module.exports = async () => {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useCreateIndex: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   });
 };
