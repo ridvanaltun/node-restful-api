@@ -13,9 +13,7 @@ module.exports = async (req, res, next) => {
   const decoded = jwt.verify(accessToken, configs.secrets.jwt.access);
 
   // keep user session
-  user = await User
-      .findOne({username: decoded.username})
-      .select('_id username email role +password');
+  user = await User.findById(decoded.id);
 
   // if user not exist throw error
   if (!user) return next(createError.Unauthorized('Access token owner not found'));

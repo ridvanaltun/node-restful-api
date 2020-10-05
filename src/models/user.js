@@ -20,7 +20,6 @@ const userSchema = new mongoose.Schema({
   password: {
     type: String,
     trim: true,
-    select: false,
   },
   email: {
     type: String,
@@ -90,8 +89,8 @@ userSchema.methods.toProfileJSON = function() {
 // generates jwt token
 userSchema.methods.generateJWT = function() {
   return {
-    access: jwt.sign({username: this.username}, access, {expiresIn: access_token_life}),
-    refresh: jwt.sign({username: this.username}, refresh, {expiresIn: refresh_token_life}),
+    access: jwt.sign({id: this._id}, access, {expiresIn: access_token_life}),
+    refresh: jwt.sign({id: this._id}, refresh, {expiresIn: refresh_token_life}),
   };
 };
 
