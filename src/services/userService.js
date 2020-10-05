@@ -18,8 +18,15 @@ class UserService {
   async getAll(query) {
     try {
       const options = lib.paginateQueryMongoose('users', query);
-      const users = await User.paginate({}, options);
-      return {users};
+
+      // create paginated result
+      const paginate = await User.paginate({}, options);
+
+      // convert user object to profile
+      const usersProfile = paginate.users.map((user) => user.toProfileJSON());
+      paginate.users = usersProfile;
+
+      return {users: paginate};
     } catch (error) {
       return {error};
     }
@@ -36,7 +43,7 @@ class UserService {
   async getOneByUsername(username) {
     try {
       const user = await User.findOne({username});
-      return {user};
+      return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
     }
@@ -68,7 +75,7 @@ class UserService {
       // note: removed await because email server can be slow
       emailClient.sendActivationLink(user.email, fullName, user._id, activationCode);
 
-      return {user};
+      return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
     }
@@ -86,7 +93,7 @@ class UserService {
   async update({username, body}) {
     try {
       const user = await User.findOneAndUpdate({username}, body, {new: true});
-      return {user};
+      return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
     }
@@ -123,7 +130,7 @@ class UserService {
       const user = await User.findOne({username});
       await user.setPassword(newPassword);
       await user.save();
-      return {user};
+      return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
     }

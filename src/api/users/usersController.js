@@ -23,9 +23,6 @@ exports.create_a_user = async (req, res, next) => {
   res.set('X-Access-Token', access);
   res.set('X-Refresh-Token', refresh);
 
-  // hide password in response
-  user.password = undefined;
-
   res.status(201).json(user);
 };
 

@@ -68,9 +68,6 @@ exports.login = async (req, res, next) => {
       // validate password
       const isPasswordCorrect = await user.isPasswordCorrect(password);
 
-      // hide password after validation
-      user.password = undefined;
-
       if (isPasswordCorrect) {
         // reset username+ip based api limit on successful authorisation
         if (!!resUsernameAndIP && resUsernameAndIP.consumedPoints > 0) {
@@ -79,7 +76,8 @@ exports.login = async (req, res, next) => {
         // give tokens
         res.set('X-Access-Token', access);
         res.set('X-Refresh-Token', refresh);
-        res.json(user);
+
+        res.json(user.toProfileJSON());
       } else {
         // when password wrong
         [err, limitStats] = await to(limiterConsecutiveFailsByUsernameAndIP.consume(usernameIPkey));

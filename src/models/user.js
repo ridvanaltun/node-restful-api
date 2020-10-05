@@ -67,4 +67,20 @@ userSchema.methods.setPassword = async function(password) {
   this.password = await bcrypt.hash(password, 10);
 };
 
+// returns profile object
+userSchema.methods.toProfileJSON = function() {
+  return {
+    id: this._id,
+    role: this.role,
+    email: this.email,
+    username: this.username,
+    first_name: this.first_name,
+    last_name: this.last_name,
+    created_at: this.created_at,
+    updated_at: this.updated_at,
+    email_verified: this.email_verified,
+  };
+};
+
+
 module.exports = mongoose.model('User', userSchema);
