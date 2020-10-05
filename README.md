@@ -79,12 +79,13 @@ $ docker-compose up -d
 $ npm run start
 ```
 
-`MongoDB` run at 27017 and `Mogoku` run at 3100 as default.
+`MongoDB` runs at 27017 and `Mogoku` runs at 3100 as default.
 
 ## To:Do
 
 - [x] Add JWT (JSON Web Tokens)
-- [x] Add ability to refresh token
+- [x] Add ability to refresh JWT token
+- [ ] Add ability to blacklist JWT token on logout
 - [ ] Add API documentation (Swagger) generator
 - [x] Add Postman collection
 - [x] Add API limitter for security
@@ -97,5 +98,5 @@ $ npm run start
 - [ ] Add login and logout logs
 - [x] Add request logger
 - [ ] Add documantation for pagination and endpoints
-- [ ] Add role based access control
+- [ ] Add access control system
 - [ ] Add auto semantic release with a CI/CD tool

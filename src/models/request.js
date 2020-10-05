@@ -2,9 +2,7 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const ENUMS = require('../enums');
 
-const {Schema} = mongoose;
-
-const requestSchema = new Schema({
+const requestSchema = new mongoose.Schema({
   type: {
     type: String,
     enum: [...ENUMS.HTTP_METHODS],

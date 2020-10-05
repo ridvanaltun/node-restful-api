@@ -71,6 +71,16 @@ userSchema.methods.setPassword = async function(password) {
   this.password = await bcrypt.hash(password, 10);
 };
 
+// check admin role
+userSchema.methods.isAdmin = function() {
+  return this.role === 'admin';
+};
+
+// check user role
+userSchema.methods.isUser = function() {
+  return this.role === 'user';
+};
+
 // returns profile object
 userSchema.methods.toProfileJSON = function() {
   return {
@@ -89,8 +99,8 @@ userSchema.methods.toProfileJSON = function() {
 // generates jwt token
 userSchema.methods.generateJWT = function() {
   return {
-    access: jwt.sign({id: this._id}, access, {expiresIn: access_token_life}),
-    refresh: jwt.sign({id: this._id}, refresh, {expiresIn: refresh_token_life}),
+    access: jwt.sign({id: this._id, role: this.role}, access, {expiresIn: access_token_life}),
+    refresh: jwt.sign({id: this._id, role: this.role}, refresh, {expiresIn: refresh_token_life}),
   };
 };
 

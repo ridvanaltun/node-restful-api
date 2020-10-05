@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../configs');
 
-const {Schema} = mongoose;
-
-const ActivationCodeSchema = new Schema({
+const ActivationCodeSchema = new mongoose.Schema({
   email: {
     type: String,
     required: true,

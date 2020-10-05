@@ -50,6 +50,23 @@ class UserService {
   }
 
   /**
+   * Fetch one user by id
+   *
+   * @param   {string}  id  User id
+   *
+   * @return  {object}      User
+   * @throws  {Error}
+   */
+  async getOneById(id) {
+    try {
+      const user = await User.findById(id);
+      return {user: user.toProfileJSON()};
+    } catch (error) {
+      return {error};
+    }
+  }
+
+  /**
    * Create an user
    *
    * @param   {object}  body  User body

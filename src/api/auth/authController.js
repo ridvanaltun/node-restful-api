@@ -61,50 +61,50 @@ exports.login = async (req, res, next) => {
     }
   }
 
-  User.findOne({username}, async (err, user) => {
-    if (err) return next(err);
-    if (user) {
-      // validate password
-      const isPasswordCorrect = await user.isPasswordCorrect(password);
+  // find user
+  const user = await User.findOne({username});
 
-      if (isPasswordCorrect) {
-        // reset username+ip based api limit on successful authorisation
-        if (!!resUsernameAndIP && resUsernameAndIP.consumedPoints > 0) {
-          await limiterConsecutiveFailsByUsernameAndIP.delete(usernameIPkey);
-        }
+  // when user not found
+  if (!user) {
+    [err, limitStats] = await to(limiterSlowBruteByIP.consume(ipAddr));
 
-        const {access, refresh} = user.generateJWT();
-
-        // give tokens
-        res.set('X-Access-Token', access);
-        res.set('X-Refresh-Token', refresh);
-
-        res.json(user.toProfileJSON());
-      } else {
-        // when password wrong
-        [err, limitStats] = await to(limiterConsecutiveFailsByUsernameAndIP.consume(usernameIPkey));
-
-        if (err) {
-          const retrySecs = limiterConsecutiveFailsByUsernameAndIP.blockDuration;
-          res.set('Retry-After', String(retrySecs));
-          return next(errors.loginTooManyWrongAttemptsByUserAndIpAddress());
-        }
-
-        return next(errors.passwordIncorrect());
-      }
-    } else {
-      // when user not found
-      [err, limitStats] = await to(limiterSlowBruteByIP.consume(ipAddr));
-
-      if (err) {
-        const retrySecs = limiterSlowBruteByIP.blockDuration;
-        res.set('Retry-After', String(retrySecs));
-        return next(errors.loginTooManyWrongAttemptsByIpAddress());
-      }
-
-      return next(errors.userNotFound());
+    if (err) {
+      const retrySecs = limiterSlowBruteByIP.blockDuration;
+      res.set('Retry-After', String(retrySecs));
+      return next(errors.loginTooManyWrongAttemptsByIpAddress());
     }
-  }).select('+password');
+
+    return next(errors.userNotFound());
+  }
+
+  // validate password
+  const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+  if (isPasswordCorrect) {
+    // reset username+ip based api limit on successful authorisation
+    if (!!resUsernameAndIP && resUsernameAndIP.consumedPoints > 0) {
+      await limiterConsecutiveFailsByUsernameAndIP.delete(usernameIPkey);
+    }
+
+    const {access, refresh} = user.generateJWT();
+
+    // give tokens
+    res.set('X-Access-Token', access);
+    res.set('X-Refresh-Token', refresh);
+
+    res.json(user.toProfileJSON());
+  } else {
+    // when password wrong
+    [err, limitStats] = await to(limiterConsecutiveFailsByUsernameAndIP.consume(usernameIPkey));
+
+    if (err) {
+      const retrySecs = limiterConsecutiveFailsByUsernameAndIP.blockDuration;
+      res.set('Retry-After', String(retrySecs));
+      return next(errors.loginTooManyWrongAttemptsByUserAndIpAddress());
+    }
+
+    return next(errors.passwordIncorrect());
+  }
 };
 
 exports.logout = (req, res, next) => {

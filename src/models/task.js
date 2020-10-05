@@ -1,9 +1,7 @@
 const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 
-const {Schema} = mongoose;
-
-const TaskSchema = new Schema({
+const TaskSchema = new mongoose.Schema({
   name: {
     type: String,
     required: 'Kindly enter the name of the task',
