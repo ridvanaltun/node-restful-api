@@ -16,7 +16,7 @@ module.exports = (err, req, res, next) => {
   if (jwtErrors.includes(err.name)) return handleJwtErrors(err, res);
 
   // Handle http errors
-  if (err.status) return res.status(err.status).send({...err});
+  if (err.status) return res.status(err.status).json({...err});
 
   // Pass error to server error handler
   next(err);
@@ -25,10 +25,10 @@ module.exports = (err, req, res, next) => {
 const handleMongooseErrors = (err, res) => {
   switch (err.code) {
     case 11000: // handle duplicate key error
-      res.status(409).send({code: err.code, message: err.errmsg});
+      res.status(409).json({code: err.code, message: err.errmsg});
       break;
     default:
-      res.status(418).send({code: err.code, message: err.errmsg});
+      res.status(418).json({code: err.code, message: err.errmsg});
       break;
   }
 };
@@ -54,7 +54,7 @@ const handleCelebrateErrors = (err, res) => {
     errors[path] = message;
   });
 
-  res.status(400).send({
+  res.status(400).json({
     message: err.message,
     errors: errors,
   });
@@ -63,13 +63,13 @@ const handleCelebrateErrors = (err, res) => {
 const handleJwtErrors = (err, res) => {
   switch (err.name) {
     case 'TokenExpiredError':
-      res.status(401).send({message: 'Token expired'});
+      res.status(401).json({message: 'Token expired'});
       break;
     case 'JsonWebTokenError':
-      res.status(400).send({message: 'Token malformed'});
+      res.status(400).json({message: 'Token malformed'});
       break;
     case 'NotBeforeError':
-      res.status(400).send({message: 'Token not active'});
+      res.status(400).json({message: 'Token not active'});
       break;
   }
 };

@@ -11,7 +11,6 @@ module.exports = (req, res, next) => {
     });
   } else {
     // Forbidden
-    res.status(403);
-    res.send({code: 403, title: 'Forbidden'});
+    res.status(403).json({message: 'Forbidden'});
   }
 };
