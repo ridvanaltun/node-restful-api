@@ -13,7 +13,7 @@ const ActivationCodeSchema = new mongoose.Schema({
   dateCreated: {
     type: Date,
     default: Date.now(),
-    expires: config.email.password_activation_timeout, // in seconds
+    expires: config.email.passwordActivationTimeout, // in seconds
   },
 });
 

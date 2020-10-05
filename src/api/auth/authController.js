@@ -112,14 +112,14 @@ exports.logout = (req, res, next) => {
 };
 
 exports.create_a_token = (req, res, next) => {
-  const {username} = req;
+  const {id, role} = req.payload;
 
-  const accessTokenOptions = {expiresIn: configs.jwt.access_token_life};
-  const refreshTokenOptions = {expiresIn: configs.jwt.refresh_token_life};
+  const accessTokenOptions = {expiresIn: configs.jwt.accessTokenLife};
+  const refreshTokenOptions = {expiresIn: configs.jwt.refreshTokenLife};
 
   // create a access token
-  const accessToken = jwt.sign({username}, configs.secrets.jwt.access, accessTokenOptions);
-  const refreshToken = jwt.sign({username}, configs.secrets.jwt.refresh, refreshTokenOptions);
+  const accessToken = jwt.sign({id, role}, configs.secrets.jwt.access, accessTokenOptions);
+  const refreshToken = jwt.sign({id, role}, configs.secrets.jwt.refresh, refreshTokenOptions);
 
   res.set('X-Access-Token', accessToken);
   res.set('X-Refresh-Token', refreshToken);

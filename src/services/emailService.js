@@ -3,7 +3,7 @@ const nodemailer = require('nodemailer');
 const Mailgen = require('mailgen');
 const {secondsToRemaing} = require('../utils');
 const {email, frontend, app} = require('../configs');
-const {smtp, address, password_activation_timeout: activationTimeout} = email;
+const {smtp, address, passwordActivationTimeout} = email;
 
 /**
  * Email service
@@ -14,7 +14,7 @@ class EmailService {
     const {host, port, user, password: pass} = smtp;
 
     // addresses
-    this.noReplyAddress = address.no_reply;
+    this.noReplyAddress = address.noReply;
 
     // email templates
     this.mailGenerator = new Mailgen({
@@ -22,7 +22,7 @@ class EmailService {
       product: {
         name: app.name,
         link: frontend.address,
-        logo: frontend.logo_url,
+        logo: frontend.logoUrl,
       },
     });
 
@@ -38,8 +38,8 @@ class EmailService {
   }
 
   async sendActivationLink(to, name, userId, activationCode) {
-    const {address, email_verification_path: emailVerificationPath} = frontend;
-    const remaining = secondsToRemaing(activationTimeout);
+    const {address, emailVerificationPath} = frontend;
+    const remaining = secondsToRemaing(passwordActivationTimeout);
     try {
       // create mail
       const mail = this.mailGenerator.generate({

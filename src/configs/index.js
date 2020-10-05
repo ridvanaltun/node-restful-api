@@ -19,19 +19,19 @@ module.exports = {
   mongo: {
     host: process.env.MONGO_HOST,
     port: parseInt(process.env.MONGO_PORT, 10),
-    db_name: process.env.MONGO_DATABASE,
-    admin_db_name: process.env.MONGO_INITDB_DATABASE,
-    admin_username: process.env.MONGO_INITDB_ROOT_USERNAME,
-    admin_password: process.env.MONGO_INITDB_ROOT_PASSWORD,
+    dbName: process.env.MONGO_DATABASE,
+    adminDbName: process.env.MONGO_INITDB_DATABASE,
+    adminUsername: process.env.MONGO_INITDB_ROOT_USERNAME,
+    adminPassword: process.env.MONGO_INITDB_ROOT_PASSWORD,
     username: process.env.MONGO_USERNAME,
     password: process.env.MONGO_PASSWORD,
   },
   logs: {
     level: process.env.LOG_LEVEL,
   },
-  request_logs: {
+  requestLogs: {
     enable: process.env.REQUEST_LOGGER_ENABLE == 'true',
-    return_id_enable: process.env.REQUEST_LOGGER_RETURN_ID_ENABLE == 'true',
+    returnIdEnable: process.env.REQUEST_LOGGER_RETURN_ID_ENABLE == 'true',
   },
   secrets: {
     jwt: {
@@ -40,14 +40,14 @@ module.exports = {
     },
   },
   jwt: {
-    access_token_life: process.env.JWT_ACCESS_TOKEN_LIFE,
-    refresh_token_life: process.env.JWT_REFRESH_TOKEN_LIFE,
+    accessTokenLife: process.env.JWT_ACCESS_TOKEN_LIFE,
+    refreshTokenLife: process.env.JWT_REFRESH_TOKEN_LIFE,
   },
   api: {
     version: process.env.API_VERSION,
   },
   agenda: {
-    db_name: process.env.AGENDA_DATABASE,
+    dbName: process.env.AGENDA_DATABASE,
   },
   email: {
     smtp: {
@@ -57,13 +57,13 @@ module.exports = {
       port: process.env.EMAIL_PORT,
     },
     address: {
-      no_reply: process.env.EMAIL_ADDRESS_NO_REPLY,
+      noReply: process.env.EMAIL_ADDRESS_NO_REPLY,
     },
-    password_activation_timeout: process.env.PASSWORD_ACTIVATION_TIMEOUT,
+    passwordActivationTimeout: process.env.PASSWORD_ACTIVATION_TIMEOUT,
   },
   frontend: {
     address: process.env.FRONTEND_ADDRESS,
-    email_verification_path: process.env.FRONTEND_EMAIL_VERIFICATION_PATH,
-    logo_url: process.env.FRONTEND_LOGO_URL,
+    emailVerificationPath: process.env.FRONTEND_EMAIL_VERIFICATION_PATH,
+    logoUrl: process.env.FRONTEND_LOGO_URL,
   },
 };

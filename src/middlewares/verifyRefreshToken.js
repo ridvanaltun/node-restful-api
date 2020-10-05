@@ -6,7 +6,7 @@ module.exports = (req, res, next) => {
   if (typeof token !== 'undefined') {
     jwt.verify(token, configs.secrets.jwt.refresh, (err, decoded) => {
       if (err) return next(err);
-      req.username = decoded.username;
+      req.payload = decoded;
       next();
     });
   } else {

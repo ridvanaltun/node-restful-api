@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken');
 
 // configs
 const {access, refresh} = require('../configs').secrets.jwt;
-const {access_token_life, refresh_token_life} = require('../configs').jwt;
+const {accessTokenLife, refreshTokenLife} = require('../configs').jwt;
 
 const userSchema = new mongoose.Schema({
   username: {
@@ -99,8 +99,8 @@ userSchema.methods.toProfileJSON = function() {
 // generates jwt token
 userSchema.methods.generateJWT = function() {
   return {
-    access: jwt.sign({id: this._id, role: this.role}, access, {expiresIn: access_token_life}),
-    refresh: jwt.sign({id: this._id, role: this.role}, refresh, {expiresIn: refresh_token_life}),
+    access: jwt.sign({id: this._id, role: this.role}, access, {expiresIn: accessTokenLife}),
+    refresh: jwt.sign({id: this._id, role: this.role}, refresh, {expiresIn: refreshTokenLife}),
   };
 };
 

@@ -77,8 +77,8 @@ module.exports = async ({app, agenda}) => {
    */
 
   // log requests
-  if (configs.request_logs.enable) {
-    app.use(middlewares.requestLogger(configs.request_logs.return_id_enable));
+  if (configs.requestLogs.enable) {
+    app.use(middlewares.requestLogger(configs.requestLogs.returnIdEnable));
   }
 
   // node.js logger

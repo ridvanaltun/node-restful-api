@@ -5,10 +5,10 @@ module.exports = async () => {
   const {
     host,
     port,
-    db_name: dbName,
+    dbName,
     username,
     password,
-    admin_db_name: adminDbName,
+    adminDbName,
   } = configs.mongo;
 
   const MONGODB_ADDRESS =
