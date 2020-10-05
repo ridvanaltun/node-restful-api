@@ -1,7 +1,15 @@
+const {isCelebrateError} = require('celebrate');
+
 // Handle client errors
 module.exports = (err, req, res, next) => {
   // Handle mongoose errors
   if (err.name === 'MongoError') return handleMongooseErrors(err, res);
+
+  // Handle mongoose-unique-validator errors
+  if (err.name === 'ValidationError') return handleMongooseDublicationErrors(err, res);
+
+  // Custom celebrate error handler
+  if (isCelebrateError(err)) return handleCelebrateErrors(err, res);
 
   // Handle jwt errors
   const jwtErrors = ['TokenExpiredError', 'JsonWebTokenError', 'NotBeforeError'];
@@ -17,12 +25,39 @@ module.exports = (err, req, res, next) => {
 const handleMongooseErrors = (err, res) => {
   switch (err.code) {
     case 11000: // handle duplicate key error
-      res.status(409).send({code: err.code, error: err.errmsg});
+      res.status(409).send({code: err.code, message: err.errmsg});
       break;
     default:
-      res.status(418).send({code: err.code, error: err.errmsg});
+      res.status(418).send({code: err.code, message: err.errmsg});
       break;
   }
+};
+
+const handleMongooseDublicationErrors = (err, res) => {
+  res.status(422).json({
+    message: err.message,
+    errors: Object.keys(err.errors).reduce(function(errors, key) {
+      errors[key] = err.errors[key].message;
+
+      return errors;
+    }, {}),
+  });
+};
+
+const handleCelebrateErrors = (err, res) => {
+  const errors = {};
+
+  err.details.forEach((item, key) => {
+    const path = item.details[0].path.join('.');
+    const message = item.details[0].message;
+
+    errors[path] = message;
+  });
+
+  res.status(400).send({
+    message: err.message,
+    errors: errors,
+  });
 };
 
 const handleJwtErrors = (err, res) => {

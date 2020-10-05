@@ -2,7 +2,6 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const logger = require('morgan');
 const cookieParser = require('cookie-parser');
-const {errors} = require('celebrate');
 const helmet = require('helmet');
 const middlewares = require('../middlewares');
 const configs = require('../configs');
@@ -127,10 +126,8 @@ module.exports = async ({app, agenda}) => {
   // log errors
   app.use(middlewares.logErrors);
 
-  // handle celebrate errors
-  app.use(errors());
-
   // 404
+  // raise when path not found
   app.use(middlewares.notFoundHandler);
 
   // handle client errors

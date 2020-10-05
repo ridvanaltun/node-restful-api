@@ -5,6 +5,11 @@ const isDev = configs.app.environment === ENUMS.APP.MODES.DEV;
 
 // Logs errors
 module.exports = (err, req, res, next) => {
-  isDev ? console.error(err.stack) : null;
+  if (isDev) {
+    console.log('############################# START ERROR #############################');
+    console.error(err.stack);
+    console.log('############################## END ERROR ##############################');
+  }
+
   next(err);
 };
