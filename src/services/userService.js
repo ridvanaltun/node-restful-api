@@ -1,7 +1,7 @@
 const User = require('mongoose').model('User');
-const lib = require('../lib');
 const EmailService = require('./emailService');
 const AuthService = require('./authService');
+const {paginateQueries} = require('../utils');
 
 /**
  * User service
@@ -17,10 +17,8 @@ class UserService {
    */
   async getAll(query) {
     try {
-      const options = lib.paginateQueryMongoose('users', query);
-
       // create paginated result
-      const paginate = await User.paginate({}, options);
+      const paginate = await User.paginate({}, paginateQueries('users', query));
 
       // convert user object to profile
       const usersProfile = paginate.users.map((user) => user.toProfileJSON());

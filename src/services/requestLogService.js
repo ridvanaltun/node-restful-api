@@ -1,5 +1,5 @@
 const RequestLog = require('mongoose').model('RequestLog');
-const lib = require('../lib');
+const {paginateQueries} = require('../utils');
 
 /**
  * Request log service
@@ -15,10 +15,8 @@ class RequestLogService {
    */
   async getAll(query) {
     try {
-      const options = lib.paginateQueryMongoose('request_logs', query);
-
       // create paginated result
-      const paginate = await RequestLog.paginate({}, options);
+      const paginate = await RequestLog.paginate({}, paginateQueries('request_logs', query));
 
       return {requestLogs: paginate};
     } catch (error) {
