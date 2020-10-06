@@ -17,8 +17,9 @@ services:
     restart: always
 
   node-app-mongoku:
-    image: huggingface/mongoku:1.3.0
+    build: ./docker/mongoku
     container_name: node-app-mongoku
+    command: dockerize -wait http://node-app-mongodb:${MONGO_PORT} bash /app/docker-run.sh
     depends_on:
       - node-app-mongodb
     ports:
