@@ -1,9 +1,9 @@
-const Request = require('mongoose').model('Request');
+const RequestLog = require('mongoose').model('RequestLog');
 const requestIp = require('request-ip');
 
 module.exports = (returnReqId) => {
   return (req, res, next) => {
-    const log = new Request({
+    const log = new RequestLog({
       type: req.method,
       headers: req.headers,
       query: req.query,

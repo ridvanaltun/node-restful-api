@@ -67,6 +67,7 @@ module.exports = async ({app, agenda}) => {
   // if extended is true -> url encoded data will parsed with qs library
   // if extended is false -> url encoded data will parsed with querystring library
   // extended olunca nested obje ve arrayler x-www-form-urlencoded ile gönderilebiliyor
+  // package will parse the data sent through the form and attach it to the req.body object
   app.use(bodyParser.urlencoded({extended: false}));
 
   // parsing cookies
@@ -117,14 +118,15 @@ module.exports = async ({app, agenda}) => {
       });
 
   // set agenda
-  app.use('/dash', middlewares.verifyToken, middlewares.isAdmin, agenda);
+  // todo: dockerize dash or use somethong else
+  app.use('/dash', agenda);
 
   /**
    * Error Handling
    */
 
-  // log errors
-  app.use(middlewares.logErrors);
+  // log errors to console
+  app.use(middlewares.consoleLogErrors);
 
   // 404
   // raise when path not found

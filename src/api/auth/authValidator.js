@@ -14,20 +14,20 @@ exports.logout = celebrate({
   }),
 });
 
-exports.create_a_token = celebrate({
+exports.createToken = celebrate({
   [Segments.HEADERS]: Joi.object().keys({
     'x-refresh-token': Joi.string().required(),
   }).unknown(),
 });
 
-exports.activate_email = celebrate({
+exports.activateEmail = celebrate({
   [Segments.BODY]: Joi.object().keys({
     uid: Joi.string().required(),
     token: Joi.string().required(),
   }),
 });
 
-exports.activate_email_resend = celebrate({
+exports.activateEmailResend = celebrate({
   [Segments.BODY]: Joi.object().keys({
     email: Joi.string().email().required(),
   }),

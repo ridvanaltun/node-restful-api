@@ -3,6 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const uniqueValidator = require('mongoose-unique-validator');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const roles = require('../roles');
 
 // configs
 const {access, refresh} = require('../configs').secrets.jwt;
@@ -79,6 +80,12 @@ userSchema.methods.isAdmin = function() {
 // check user role
 userSchema.methods.isUser = function() {
   return this.role === 'user';
+};
+
+// returns access control object
+// ex: user.getAccessController().updateOwn('profile').granted // true or false
+userSchema.methods.getAccessController = function() {
+  return roles.can(this.role);
 };
 
 // returns profile object

@@ -3,7 +3,7 @@ const {UserService} = require('../../services');
 
 const service = new UserService();
 
-exports.list_all_users = async (req, res, next) => {
+exports.listUsers = async (req, res, next) => {
   const {users, error} = await service.getAll(req.query);
 
   if (error) return next(error);
@@ -12,7 +12,7 @@ exports.list_all_users = async (req, res, next) => {
 };
 
 
-exports.create_a_user = async (req, res, next) => {
+exports.createUser = async (req, res, next) => {
   const {user, error} = await service.create({...req.body});
 
   if (error) return next(error);
@@ -27,7 +27,7 @@ exports.create_a_user = async (req, res, next) => {
 };
 
 
-exports.read_a_user = async (req, res, next) => {
+exports.readUser = async (req, res, next) => {
   const {username} = req.params;
 
   const {user, error} = await service.getOneByUsername(username);
@@ -39,7 +39,7 @@ exports.read_a_user = async (req, res, next) => {
 };
 
 
-exports.update_a_user = async (req, res, next) => {
+exports.updateUser = async (req, res, next) => {
   const {username} = req.params;
 
   // usernames not match, means this user not belong to token owner
@@ -53,7 +53,7 @@ exports.update_a_user = async (req, res, next) => {
 };
 
 
-exports.delete_a_user = async (req, res, next) => {
+exports.deleteUser = async (req, res, next) => {
   const {username} = req.params;
 
   // usernames not match, means this user not belong to token owner
@@ -67,7 +67,7 @@ exports.delete_a_user = async (req, res, next) => {
 };
 
 // todo: add email verification
-exports.update_password = async (req, res, next) => {
+exports.updatePassword = async (req, res, next) => {
   const {username} = req.params;
   const {password, new_password: newPassword} = req.body;
 

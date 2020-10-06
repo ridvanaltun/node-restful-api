@@ -1,23 +1,22 @@
 const express = require('express');
-const handle = require('./authController');
+const controllers = require('./authController');
 const validator = require('./authValidator');
-const middlewares = require('../../middlewares');
 
 const auth = express.Router();
 
 auth.route('/login')
-    .post(validator.login, handle.login);
+    .post(validator.login, controllers.login);
 
 auth.route('/logout')
-    .post(validator.logout, handle.logout);
+    .post(validator.logout, controllers.logout);
 
 auth.route('/token')
-    .post(validator.create_a_token, middlewares.verifyRefreshToken, handle.create_a_token);
+    .post(validator.createToken, controllers.createToken);
 
 auth.route('/confirmation/email')
-    .post(validator.activate_email, handle.activate_email);
+    .post(validator.activateEmail, controllers.activateEmail);
 
 auth.route('/resend')
-    .post(validator.activate_email_resend, handle.activate_email_resend);
+    .post(validator.activateEmailResend, controllers.activateEmailResend);
 
 module.exports = () => auth;

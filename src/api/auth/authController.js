@@ -111,22 +111,30 @@ exports.logout = (req, res, next) => {
   // todo: add logic
 };
 
-exports.create_a_token = (req, res, next) => {
-  const {id, role} = req.payload;
+exports.createToken = (req, res, next) => {
+  const token = req.headers['x-refresh-token'];
 
-  const accessTokenOptions = {expiresIn: configs.jwt.accessTokenLife};
-  const refreshTokenOptions = {expiresIn: configs.jwt.refreshTokenLife};
+  if (typeof token === 'undefined') return next(errors.refreshTokenNotFound());
 
-  // create a access token
-  const accessToken = jwt.sign({id, role}, configs.secrets.jwt.access, accessTokenOptions);
-  const refreshToken = jwt.sign({id, role}, configs.secrets.jwt.refresh, refreshTokenOptions);
+  jwt.verify(token, configs.secrets.jwt.refresh, (err, decoded) => {
+    if (err) return next(err);
 
-  res.set('X-Access-Token', accessToken);
-  res.set('X-Refresh-Token', refreshToken);
-  res.end();
+    const {id, role} = decoded;
+
+    const accessTokenOptions = {expiresIn: configs.jwt.accessTokenLife};
+    const refreshTokenOptions = {expiresIn: configs.jwt.refreshTokenLife};
+
+    // create a access token
+    const accessToken = jwt.sign({id, role}, configs.secrets.jwt.access, accessTokenOptions);
+    const refreshToken = jwt.sign({id, role}, configs.secrets.jwt.refresh, refreshTokenOptions);
+
+    res.set('X-Access-Token', accessToken);
+    res.set('X-Refresh-Token', refreshToken);
+    res.end();
+  });
 };
 
-exports.activate_email = async (req, res, next) => {
+exports.activateEmail = async (req, res, next) => {
   const {uid, token} = req.body;
 
   const isLinkValid = await service.validateActivationLink(uid, token);
@@ -136,7 +144,7 @@ exports.activate_email = async (req, res, next) => {
   res.status(200).end();
 };
 
-exports.activate_email_resend = async (req, res, next) => {
+exports.activateEmailResend = async (req, res, next) => {
   const {email} = req.body;
 
   const isResendSuccess = await service.resendActivationEmail(email);
