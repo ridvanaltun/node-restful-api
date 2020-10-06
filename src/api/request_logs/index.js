@@ -1,7 +1,7 @@
-const routers = require('./requestLogsRouter');
-const controllers = require('./requestLogsController');
-const validators = require('./requestLogsValidator');
-const errors = require('./requestLogsError');
+const routers = require('./requestLogRouters');
+const controllers = require('./requestLogControllers');
+const validators = require('./requestLogValidators');
+const errors = require('./requestLogErrors');
 
 module.exports = {
   routers,

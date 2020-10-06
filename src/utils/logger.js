@@ -18,7 +18,7 @@ if (configs.app.environment !== enums.APP.MODES.DEV) {
   );
 }
 
-const LoggerInstance = winston.createLogger({
+const loggerInstance = winston.createLogger({
   level: configs.logs.level,
   levels: winston.config.npm.levels,
   format: winston.format.combine(
@@ -32,4 +32,4 @@ const LoggerInstance = winston.createLogger({
   transports,
 });
 
-module.exports = LoggerInstance;
+module.exports = loggerInstance;

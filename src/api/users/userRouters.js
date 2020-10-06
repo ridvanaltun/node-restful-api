@@ -1,6 +1,6 @@
 const express = require('express');
-const controllers = require('./usersController');
-const validators = require('./usersValidator');
+const controllers = require('./userControllers');
+const validators = require('./userValidators');
 const common = require('../common');
 const auth = require('../common/auth');
 

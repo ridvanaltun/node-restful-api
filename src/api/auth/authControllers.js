@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken');
 const {RateLimiterMongo} = require('rate-limiter-flexible');
 const requestIp = require('request-ip');
 const to = require('await-to-js').default;
-const errors = require('./authError');
+const errors = require('./authErrors');
 const configs = require('../../configs');
 
 const service = new AuthService();

@@ -1,5 +1,5 @@
 const express = require('express');
-const {Logger} = require('./utils');
+const {logger} = require('./utils');
 const configs = require('./configs');
 const loader = require('./loaders');
 
@@ -13,11 +13,11 @@ async function startServer() {
   const {port} = configs.app;
   app.listen(port, (err) => {
     if (err) {
-      Logger.error(err);
+      logger.error(err);
       process.exit(1);
       return;
     }
-    Logger.info(`🛡️  Server listening on port: ${port}`);
+    logger.info(`🛡️  Server listening on port: ${port}`);
   });
 }
 

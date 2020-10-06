@@ -1,5 +1,5 @@
-const UserService = require('./userService');
-const EmailService = require('./emailService');
+const UserService = require('./UserService');
+const EmailService = require('./EmailService');
 const AuthService = require('./AuthService');
 const RequestLogService = require('./RequestLogService');
 

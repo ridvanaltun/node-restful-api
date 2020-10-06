@@ -1,12 +1,12 @@
 const express = require('express');
-const controllers = require('./requestLogsController');
+const controllers = require('./requestLogControllers');
 const common = require('../common');
 const auth = require('../common/auth');
 const grantAccess = require('../common/grantAccess');
 
-const logs = express.Router();
+const requestLogs = express.Router();
 
-logs
+requestLogs
     .route('/')
     .get(
         auth.required,
@@ -15,7 +15,7 @@ logs
         controllers.listLogs,
     );
 
-logs
+requestLogs
     .route('/:logId')
     .get(
         auth.required,
@@ -23,4 +23,4 @@ logs
         controllers.readLog,
     );
 
-module.exports = () => logs;
+module.exports = () => requestLogs;

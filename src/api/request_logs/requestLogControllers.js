@@ -1,4 +1,4 @@
-const errors = require('./requestLogsError');
+const errors = require('./requestLogErrors');
 const {RequestLogService} = require('../../services');
 
 const service = new RequestLogService();
