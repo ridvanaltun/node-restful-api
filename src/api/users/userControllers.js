@@ -13,11 +13,9 @@ exports.listUsers = async (req, res, next) => {
 
 
 exports.createUser = async (req, res, next) => {
-  const {user, error} = await service.create({...req.body});
+  const {user, access, refresh, error} = await service.create({...req.body});
 
   if (error) return next(error);
-
-  const {access, refresh} = user.generateJWT();
 
   // bind tokens to response
   res.set('X-Access-Token', access);
@@ -85,4 +83,32 @@ exports.updatePassword = async (req, res, next) => {
   if (error) return next(error);
 
   res.json(user);
+};
+
+// follow user
+exports.followUser = (req, res, next) => {
+  // target user
+  const {id: targetUserId} = req.profile;
+
+  // follower user
+  const {id: followerUserId} = req.payload;
+
+  // do it
+  service.followUser(targetUserId, followerUserId);
+
+  res.end();
+};
+
+// unfollow user
+exports.unfollowUser = (req, res, next) => {
+  // target user
+  const {id: targetUserId} = req.profile;
+
+  // follower user
+  const {id: followerUserId} = req.payload;
+
+  // do it
+  service.unfollowUser(targetUserId, followerUserId);
+
+  res.status(204).end();
 };

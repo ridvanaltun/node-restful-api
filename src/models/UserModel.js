@@ -42,6 +42,7 @@ const userSchema = new mongoose.Schema({
     required: true,
     match: /^[a-zA-Z]+$/,
   },
+  followings: [{type: mongoose.Schema.Types.ObjectId, ref: 'User'}],
   role: {
     type: String,
     enum: ['user', 'admin'],
@@ -109,6 +110,28 @@ userSchema.methods.generateJWT = function() {
     access: jwt.sign({id: this._id, role: this.role}, access, {expiresIn: accessTokenLife}),
     refresh: jwt.sign({id: this._id, role: this.role}, refresh, {expiresIn: refreshTokenLife}),
   };
+};
+
+// follow given user
+userSchema.methods.follow = function(id) {
+  if (this.followings.indexOf(id) === -1) {
+    this.followings.push(id);
+  }
+
+  return this.save();
+};
+
+// unfollow given user
+userSchema.methods.unfollow = function(id) {
+  this.followings.remove(id);
+  return this.save();
+};
+
+// are we following given user
+userSchema.methods.isFollowing = function(id) {
+  return this.followings.some(function(followId) {
+    return followId.toString() === id.toString();
+  });
 };
 
 module.exports = mongoose.model('User', userSchema);

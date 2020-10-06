@@ -1,4 +1,5 @@
 const User = require('mongoose').model('User');
+const createError = require('http-errors');
 const EmailService = require('./emailService');
 const AuthService = require('./authService');
 const {paginateQueries} = require('../utils');
@@ -41,6 +42,9 @@ class UserService {
   async getOneByUsername(username) {
     try {
       const user = await User.findOne({username});
+
+      if (!user) return {error: createError.NotFound('User not found')};
+
       return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
@@ -58,6 +62,9 @@ class UserService {
   async getOneById(id) {
     try {
       const user = await User.findById(id);
+
+      if (!user) return {error: createError.NotFound('User not found')};
+
       return {user: user.toProfileJSON()};
     } catch (error) {
       return {error};
@@ -69,7 +76,7 @@ class UserService {
    *
    * @param   {object}  body  User body
    *
-   * @return  {object}        User
+   * @return  {object}        Serilized user object, access and refresh token
    * @throws  {Error}
    */
   async create(body) {
@@ -78,6 +85,8 @@ class UserService {
       const user = new User(body);
       await user.setPassword(body.password);
       await user.save();
+
+      const {access, refresh} = user.generateJWT();
 
       // create activation code
       const authClient = new AuthService();
@@ -90,7 +99,7 @@ class UserService {
       // note: removed await because email server can be slow
       emailClient.sendActivationLink(user.email, fullName, user._id, activationCode);
 
-      return {user: user.toProfileJSON()};
+      return {user: user.toProfileJSON(), access, refresh};
     } catch (error) {
       return {error};
     }
@@ -149,6 +158,28 @@ class UserService {
     } catch (error) {
       return {error};
     }
+  }
+
+  /**
+   * Follow an user
+   *
+   * @param   {string}  followerUserId    Follower user id
+   * @param   {string}  targetUserId      Target user id
+   */
+  async followUser(followerUserId, targetUserId) {
+    const user = await User.findById(followerUserId);
+    user.follow(targetUserId);
+  }
+
+  /**
+   * Unfollow an user
+   *
+   * @param   {string}  unfollowerUserId  Unfollower user id
+   * @param   {string}  targetUserId      Target user id
+   */
+  async unfollowUser(unfollowerUserId, targetUserId) {
+    const user = await User.findById(unfollowerUserId);
+    user.unfollow(targetUserId);
   }
 }
 
