@@ -109,7 +109,7 @@ class UserService {
    * @param   {object}  body      User body
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
-  async update ({ username, body }) {
+  async update (username, body) {
     try {
       const user = await User.findOneAndUpdate({ username }, body, { new: true })
       return response.sendSuccess(user.toProfileJSON())

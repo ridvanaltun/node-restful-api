@@ -42,7 +42,7 @@ exports.updateUser = async (req, res, next) => {
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized())
 
-  const { data, success, error } = await UserServiceInstance.update({ username, body: req.body })
+  const { data, success, error } = await UserServiceInstance.update(username, req.body)
 
   if (!success) return next(error)
 
