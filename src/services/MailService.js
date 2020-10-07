@@ -1,14 +1,14 @@
-const nodemailer = require('nodemailer');
-const Mailgen = require('mailgen');
-const {secondsToRemaing} = require('../utils');
+const nodemailer = require('nodemailer')
+const Mailgen = require('mailgen')
+const { secondsToRemaing } = require('../utils')
 
 // configs
-const {email, frontend, app} = require('../configs');
-const {smtp, address, passwordActivationTimeout} = email;
-const {host, port, user, password: pass} = smtp;
+const { email, frontend, app } = require('../configs')
+const { smtp, address, passwordActivationTimeout } = email
+const { host, port, user, password: pass } = smtp
 
 // mail addresses
-const NO_REPLY_ADDRESS = address.noReply;
+const NO_REPLY_ADDRESS = address.noReply
 
 // mail templates
 const mailGenerator = new Mailgen({
@@ -16,9 +16,9 @@ const mailGenerator = new Mailgen({
   product: {
     name: app.name,
     link: frontend.address,
-    logo: frontend.logoUrl,
-  },
-});
+    logo: frontend.logoUrl
+  }
+})
 
 // mail client
 const transporter = nodemailer.createTransport({
@@ -26,13 +26,13 @@ const transporter = nodemailer.createTransport({
   port,
   auth: {
     user,
-    pass,
-  },
-});
+    pass
+  }
+})
 
 const createActivationMail = (name, userId, activationCode) => {
-  const {address, emailVerificationPath} = frontend;
-  const remaining = secondsToRemaing(passwordActivationTimeout);
+  const { address, emailVerificationPath } = frontend
+  const remaining = secondsToRemaing(passwordActivationTimeout)
   return mailGenerator.generate({
     body: {
       name,
@@ -42,13 +42,13 @@ const createActivationMail = (name, userId, activationCode) => {
         button: {
           color: '#22BC66', // Optional action button color
           text: 'Confirm your account',
-          link: `${address}${emailVerificationPath}/${userId}/${activationCode}`,
-        },
+          link: `${address}${emailVerificationPath}/${userId}/${activationCode}`
+        }
       },
-      outro: `Activation link will expire after ${remaining}.`,
-    },
-  });
-};
+      outro: `Activation link will expire after ${remaining}.`
+    }
+  })
+}
 
 /**
  * Mail Service
@@ -61,23 +61,23 @@ class MailService {
    * @param {string}  userId          User id
    * @param {string}  activationCode  Activation code
    */
-  async sendActivationMail(to, name, userId, activationCode) {
+  async sendActivationMail (to, name, userId, activationCode) {
     try {
       // create mail
-      const mail = createActivationMail(name, userId, activationCode);
+      const mail = createActivationMail(name, userId, activationCode)
 
       // send mail
       await transporter
-          .sendMail({
-            from: NO_REPLY_ADDRESS,
-            to,
-            subject: 'Confirm your email at Node',
-            html: mail,
-          });
+        .sendMail({
+          from: NO_REPLY_ADDRESS,
+          to,
+          subject: 'Confirm your email at Node',
+          html: mail
+        })
     } catch (error) {
-      console.log(error);
+      console.log(error)
     }
   }
 }
 
-module.exports = MailService;
+module.exports = MailService

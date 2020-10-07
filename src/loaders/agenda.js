@@ -1,19 +1,19 @@
-const Agenda = require('agenda');
-const agendash = require('agendash');
-const configs = require('../configs');
+const Agenda = require('agenda')
+const agendash = require('agendash')
+const configs = require('../configs')
 
 module.exports = () => {
-  const {host, port, username, password, adminDbName} = configs.mongo;
-  const {dbName} = configs.agenda;
+  const { host, port, username, password, adminDbName } = configs.mongo
+  const { dbName } = configs.agenda
 
   const MONGODB_ADDRESS =
-    `mongodb://${username}:${password}@${host}:${port}/${dbName}?authSource=${adminDbName}`;
+    `mongodb://${username}:${password}@${host}:${port}/${dbName}?authSource=${adminDbName}`
 
   const options = {
-    useUnifiedTopology: true,
-  };
+    useUnifiedTopology: true
+  }
 
-  const agenda = new Agenda({db: {address: MONGODB_ADDRESS, options}});
+  const agenda = new Agenda({ db: { address: MONGODB_ADDRESS, options } })
 
-  return agendash(agenda);
-};
+  return agendash(agenda)
+}

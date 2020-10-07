@@ -2,14 +2,15 @@ module.exports = {
   APP: {
     MODES: {
       PROD: 'PRODUCTION',
-      DEV: 'DEVELOPMENT',
-    }},
+      DEV: 'DEVELOPMENT'
+    }
+  },
   API: {
-    PREFIX: '/api',
+    PREFIX: '/api'
   },
   USER_ROLES: {
-    USER: 'USER',
-    ADMIN: 'ADMIN',
+    USER: 'user',
+    ADMIN: 'admin'
   },
   HTTP_METHODS: [
     'GET',
@@ -26,6 +27,6 @@ module.exports = {
     'LOCK',
     'UNLOCK',
     'PROPFIND',
-    'VIEW',
-  ],
-};
+    'VIEW'
+  ]
+}

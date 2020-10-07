@@ -2,7 +2,7 @@
  * Common validators
  */
 
-const {celebrate, Joi, Segments} = require('celebrate');
+const { celebrate, Joi, Segments } = require('celebrate')
 
 // sort_order example: 'field -test', - (minus) meaning desc, otherwise asc
 exports.pagination = celebrate({
@@ -10,6 +10,6 @@ exports.pagination = celebrate({
     page: Joi.number(),
     limit: Joi.number(),
     select: Joi.string(),
-    sort_order: Joi.string(),
-  }),
-});
+    sort_order: Joi.string()
+  })
+})

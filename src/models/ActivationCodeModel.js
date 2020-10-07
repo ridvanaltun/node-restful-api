@@ -1,20 +1,20 @@
-const mongoose = require('mongoose');
-const config = require('../configs');
+const mongoose = require('mongoose')
+const config = require('../configs')
 
 const schema = new mongoose.Schema({
   email: {
     type: String,
-    required: true,
+    required: true
   },
   code: {
     type: String,
-    required: true,
+    required: true
   },
   dateCreated: {
     type: Date,
     default: Date.now(),
-    expires: config.email.passwordActivationTimeout, // in seconds
-  },
-});
+    expires: config.email.passwordActivationTimeout // in seconds
+  }
+})
 
-module.exports = mongoose.model('ActivationCode', schema);
+module.exports = mongoose.model('ActivationCode', schema)

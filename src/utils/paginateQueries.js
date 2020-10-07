@@ -1,4 +1,4 @@
-const configs = require('../configs');
+const configs = require('../configs')
 
 /**
  * Create pagination values for mongoose models
@@ -9,11 +9,11 @@ const configs = require('../configs');
  * @return {object}
  */
 module.exports = (batchArrayName, query) => {
-  const limit = query.limit || parseInt(configs.pagination.limit, 10);
-  const page = query.page || 1;
-  const select = query.select;
-  const sort = query.sort_order;
-  const customLabels = {docs: batchArrayName, totalDocs: 'total'};
+  const limit = query.limit || parseInt(configs.pagination.limit, 10)
+  const page = query.page || 1
+  const select = query.select
+  const sort = query.sort_order
+  const customLabels = { docs: batchArrayName, totalDocs: 'total' }
 
-  return {limit, page, select, sort, customLabels};
-};
+  return { limit, page, select, sort, customLabels }
+}
