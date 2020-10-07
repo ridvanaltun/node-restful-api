@@ -6,7 +6,7 @@ const User = require('mongoose').model('User')
 
 // services
 const MailService = require('./MailService')
-const AuthService = require('./authService')
+const AuthService = require('./AuthService')
 
 /**
  * User Service
