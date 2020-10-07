@@ -17,4 +17,7 @@ const schema = new mongoose.Schema({
   }
 })
 
-module.exports = mongoose.model('ActivationCode', schema)
+// remove version key
+schema.set('versionKey', false)
+
+module.exports = mongoose.model('MailActivationCode', schema)

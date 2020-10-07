@@ -1,8 +1,9 @@
 const cryptoRandomString = require('crypto-random-string')
+const { noReply } = require('../configs').email.address
 
 // models
 const User = require('mongoose').model('User')
-const ActivationCode = require('mongoose').model('ActivationCode')
+const MailActivationCode = require('mongoose').model('MailActivationCode')
 
 // services
 const MailService = require('./MailService')
@@ -19,23 +20,23 @@ class AuthService {
   }
 
   /**
-   * @description Creates activation code
+   * @description Creates activation code for email address
    * @param   {string}  email User email address
    * @return  {string}        Activation code
    */
-  async createActivationCode (email) {
+  async createMailActivationCode (email) {
     const code = cryptoRandomString({ length: 6 })
-    await new ActivationCode({ email, code }).save()
+    await new MailActivationCode({ email, code }).save()
     return code
   }
 
   /**
-   * @description Validates activation link
+   * @description Validates email activation links
    * @param   {string}  userId  User id
    * @param   {string}  code    A random generated code for user
    * @return  {boolean}         Link valid or not
    */
-  async validateActivationLink (userId, code) {
+  async validateActivationMailLink (userId, code) {
     try {
       // need for email address
       const user = await User.findById(userId)
@@ -47,7 +48,7 @@ class AuthService {
       if (user.email_verified) return false
 
       // is activation code exist
-      const activationCode = await ActivationCode.findOne({
+      const activationCode = await MailActivationCode.findOne({
         email: user.email,
         code: code
       })
@@ -59,13 +60,26 @@ class AuthService {
       await User.updateOne({ email: user.email }, { email_verified: true })
 
       // delete activation codes on user emails, no need anymore
-      await ActivationCode.deleteMany({ email: user.email })
+      await MailActivationCode.deleteMany({ email: user.email })
 
       // boom
       return true
     } catch (error) {
       return false
     }
+  }
+
+  /**
+   * @description Send activation email
+   * @param {string}  to              Reveiver email address
+   * @param {string}  name            Receiver full name
+   * @param {string}  userId          Receiver user id
+   * @param {string}  activationCode  Mail activation code
+   */
+  async sendActivationMail (to, name, userId, activationCode) {
+    const subject = 'Confirm your email at Node'
+    const mail = this.MailServiceInstance.createActivationMail(name, userId, activationCode)
+    await this.MailServiceInstance.sendMail(noReply, to, subject, mail)
   }
 
   /**
@@ -86,13 +100,13 @@ class AuthService {
       if (user.email_verified) return false
 
       // create activation code
-      const activationCode = await this.createActivationCode(user.email)
+      const activationCode = await this.createMailActivationCode(user.email)
 
       // send email
       const fullName = `${user.first_name} ${user.last_name}`
 
       // note: removed await because email server can be slow
-      this.MailServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode)
+      this.sendActivationMail(user.email, fullName, user._id, activationCode)
 
       return true
     } catch (error) {

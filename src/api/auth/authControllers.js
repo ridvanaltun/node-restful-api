@@ -138,7 +138,7 @@ exports.createToken = (req, res, next) => {
 exports.activateEmail = async (req, res, next) => {
   const { uid, token } = req.body
 
-  const isLinkValid = await AuthServiceInstance.validateActivationLink(uid, token)
+  const isLinkValid = await AuthServiceInstance.validateActivationMailLink(uid, token)
 
   if (!isLinkValid) return next(errors.activationLinkNotValid())
 

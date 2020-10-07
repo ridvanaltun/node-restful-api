@@ -4,11 +4,7 @@ const { secondsToRemaing } = require('../utils')
 
 // configs
 const { email, frontend, app } = require('../configs')
-const { smtp, address, passwordActivationTimeout } = email
-const { host, port, user, password: pass } = smtp
-
-// mail addresses
-const NO_REPLY_ADDRESS = address.noReply
+const { smtp, passwordActivationTimeout } = email
 
 // mail templates
 const mailGenerator = new Mailgen({
@@ -22,61 +18,67 @@ const mailGenerator = new Mailgen({
 
 // mail client
 const transporter = nodemailer.createTransport({
-  host,
-  port,
+  host: smtp.host,
+  port: smtp.port,
   auth: {
-    user,
-    pass
+    user: smtp.user,
+    pass: smtp.password
   }
 })
-
-const createActivationMail = (name, userId, activationCode) => {
-  const { address, emailVerificationPath } = frontend
-  const remaining = secondsToRemaing(passwordActivationTimeout)
-  return mailGenerator.generate({
-    body: {
-      name,
-      intro: `Welcome to ${app.name}! We're very excited to have you on board.`,
-      action: {
-        instructions: `To get started with ${app.name}, please click here:`,
-        button: {
-          color: '#22BC66', // Optional action button color
-          text: 'Confirm your account',
-          link: `${address}${emailVerificationPath}/${userId}/${activationCode}`
-        }
-      },
-      outro: `Activation link will expire after ${remaining}.`
-    }
-  })
-}
 
 /**
  * Mail Service
  */
 class MailService {
   /**
-   * @description Send activation mail
-   * @param {string}  to              Mail to
-   * @param {string}  name            Mail reveiver name
-   * @param {string}  userId          User id
-   * @param {string}  activationCode  Activation code
+   * @description Send email
+   * @param {string}  from    From
+   * @param {string}  to      Mail to
+   * @param {string}  subject Mail subject
+   * @param {object}  mail    HTML mail object
    */
-  async sendActivationMail (to, name, userId, activationCode) {
+  async sendMail (from, to, subject, mail) {
     try {
-      // create mail
-      const mail = createActivationMail(name, userId, activationCode)
-
       // send mail
       await transporter
         .sendMail({
-          from: NO_REPLY_ADDRESS,
+          from,
           to,
-          subject: 'Confirm your email at Node',
+          subject,
           html: mail
         })
     } catch (error) {
+      // todo: handle email errors
       console.log(error)
     }
+  }
+
+  /**
+   * @description Create activation mail object
+   * @param   {string}  name            User full name
+   * @param   {string}  userId          User id
+   * @param   {string}  ActivationCode  Mail activation code
+   * @return  {object}                  Activation mail object
+   */
+  createActivationMail (name, userId, activationCode) {
+    const { address, emailVerificationPath } = frontend
+    const remaining = secondsToRemaing(passwordActivationTimeout)
+
+    return mailGenerator.generate({
+      body: {
+        name,
+        intro: `Welcome to ${app.name}! We're very excited to have you on board.`,
+        action: {
+          instructions: `To get started with ${app.name}, please click here:`,
+          button: {
+            color: '#22BC66', // Optional action button color
+            text: 'Confirm your account',
+            link: `${address}${emailVerificationPath}/${userId}/${activationCode}`
+          }
+        },
+        outro: `Activation link will expire after ${remaining}.`
+      }
+    })
   }
 }
 

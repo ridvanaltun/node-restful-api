@@ -3,5 +3,5 @@
 module.exports = () => {
   require('./UserModel')
   require('./RequestLogModel')
-  require('./ActivationCodeModel')
+  require('./MailActivationCodeModel')
 }

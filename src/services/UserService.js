@@ -89,13 +89,13 @@ class UserService {
       const { access, refresh } = user.generateJWT()
 
       // create activation code
-      const activationCode = await this.AuthServiceInstance.createActivationCode(user.email)
+      const activationCode = await this.AuthServiceInstance.createMailActivationCode(user.email)
 
       // send email
       const fullName = `${user.first_name} ${user.last_name}`
 
       // note: removed await because email server can be slow
-      this.MailServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode)
+      this.AuthServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode)
 
       return response.sendSuccess({ user: user.toProfileJSON(), access, refresh })
     } catch (error) {
