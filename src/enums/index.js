@@ -8,10 +8,6 @@ module.exports = {
   API: {
     PREFIX: '/api'
   },
-  USER_ROLES: {
-    USER: 'user',
-    ADMIN: 'admin'
-  },
   HTTP_METHODS: [
     'GET',
     'POST',

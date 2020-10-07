@@ -46,7 +46,6 @@ const schema = new mongoose.Schema({
   }
 })
 
-// pagination support
 schema.plugin(mongoosePaginate)
 
 // remove version key
