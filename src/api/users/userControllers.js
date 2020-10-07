@@ -1,21 +1,23 @@
 const errors = require('./userErrors');
-const {UserService} = require('../../services');
 
-const service = new UserService();
+// services
+const {UserService} = require('../../services');
+const UserServiceInstance = new UserService();
 
 exports.listUsers = async (req, res, next) => {
-  const {users, error} = await service.getAll(req.query);
+  const {data, success, error} = await UserServiceInstance.getAll(req.query);
 
-  if (error) return next(error);
+  if (!success) return next(error);
 
-  res.json(users);
+  res.json(data);
 };
 
-
 exports.createUser = async (req, res, next) => {
-  const {user, access, refresh, error} = await service.create({...req.body});
+  const {data, success, error} = await UserServiceInstance.create({...req.body});
 
-  if (error) return next(error);
+  if (!success) return next(error);
+
+  const {user, access, refresh} = data;
 
   // bind tokens to response
   res.set('X-Access-Token', access);
@@ -24,18 +26,15 @@ exports.createUser = async (req, res, next) => {
   res.status(201).json(user);
 };
 
-
 exports.readUser = async (req, res, next) => {
   const {username} = req.params;
 
-  const {user, error} = await service.getOneByUsername(username);
+  const {data, success, error} = await UserServiceInstance.getByUsername(username);
 
-  if (error) return next(error);
-  if (!user) return next(errors.userNotFound());
+  if (!success) return next(error);
 
-  res.json(user);
+  res.json(data);
 };
-
 
 exports.updateUser = async (req, res, next) => {
   const {username} = req.params;
@@ -43,13 +42,12 @@ exports.updateUser = async (req, res, next) => {
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized());
 
-  const {user, error} = await service.update({username, body: req.body});
+  const {data, success, error} = await UserServiceInstance.update({username, body: req.body});
 
-  if (error) return next(error);
+  if (!success) return next(error);
 
-  res.json(user);
+  res.json(data);
 };
-
 
 exports.deleteUser = async (req, res, next) => {
   const {username} = req.params;
@@ -57,9 +55,9 @@ exports.deleteUser = async (req, res, next) => {
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized());
 
-  const {error} = await service.delete(username);
+  const {success, error} = await UserServiceInstance.delete(username);
 
-  if (error) return next(error);
+  if (!success) return next(error);
 
   res.status(204).end();
 };
@@ -78,15 +76,14 @@ exports.updatePassword = async (req, res, next) => {
   // password not correct
   if (!isPasswordCorrect) return next(errors.userPasswordWrong());
 
-  const {user, error} = await service.changePassword(username, newPassword);
+  const {data, success, error} = await UserServiceInstance.changePassword(username, newPassword);
 
-  if (error) return next(error);
+  if (!success) return next(error);
 
-  res.json(user);
+  res.json(data);
 };
 
-// follow user
-exports.followUser = (req, res, next) => {
+exports.followUser = async (req, res, next) => {
   // target user
   const {id: targetUserId} = req.profile;
 
@@ -94,13 +91,14 @@ exports.followUser = (req, res, next) => {
   const {id: followerUserId} = req.payload;
 
   // do it
-  service.followUser(targetUserId, followerUserId);
+  const {success, error} = await UserServiceInstance.followUser(targetUserId, followerUserId);
+
+  if(!success) return next(error);
 
   res.end();
 };
 
-// unfollow user
-exports.unfollowUser = (req, res, next) => {
+exports.unfollowUser = async (req, res, next) => {
   // target user
   const {id: targetUserId} = req.profile;
 
@@ -108,7 +106,9 @@ exports.unfollowUser = (req, res, next) => {
   const {id: followerUserId} = req.payload;
 
   // do it
-  service.unfollowUser(targetUserId, followerUserId);
+  const {success, error} = await UserServiceInstance.unfollowUser(targetUserId, followerUserId);
+
+  if(!success) return next(error);
 
   res.status(204).end();
 };

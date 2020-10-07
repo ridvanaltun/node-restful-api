@@ -1,24 +1,21 @@
-const errors = require('./requestLogErrors');
+// services
 const {RequestLogService} = require('../../services');
-
-const service = new RequestLogService();
+const RequestLogServiceInstance = new RequestLogService();
 
 exports.listLogs = async (req, res, next) => {
-  const {requestLogs, error} = await service.getAll(req.query);
+  const {data, success, error} = await RequestLogServiceInstance.getAll(req.query);
 
-  if (error) return next(error);
+  if (!success) return next(error);
 
-  res.json(requestLogs);
+  res.json(data);
 };
-
 
 exports.readLog = async (req, res, next) => {
   const {logId} = req.params;
 
-  const {requestLog, error} = await service.getOneById(logId);
+  const {data, success, error} = await RequestLogServiceInstance.getById(logId);
 
-  if (error) return next(error);
-  if (!requestLog) return next(errors.requestLogNotFound());
+  if (!success) return next(error);
 
-  res.json(requestLog);
+  res.json(data);
 };

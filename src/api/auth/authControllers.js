@@ -1,5 +1,4 @@
 const User = require('mongoose').model('User');
-const {AuthService} = require('../../services');
 const mongoose = require('mongoose');
 const jwt = require('jsonwebtoken');
 const {RateLimiterMongo} = require('rate-limiter-flexible');
@@ -8,7 +7,9 @@ const to = require('await-to-js').default;
 const errors = require('./authErrors');
 const configs = require('../../configs');
 
-const service = new AuthService();
+// services
+const {AuthService} = require('../../services');
+const AuthServiceInstance = new AuthService();
 
 const maxWrongAttemptsByIPperDay = 100;
 const maxConsecutiveFailsByUsernameAndIP = 12;
@@ -137,7 +138,7 @@ exports.createToken = (req, res, next) => {
 exports.activateEmail = async (req, res, next) => {
   const {uid, token} = req.body;
 
-  const isLinkValid = await service.validateActivationLink(uid, token);
+  const isLinkValid = await AuthServiceInstance.validateActivationLink(uid, token);
 
   if (!isLinkValid) return next(errors.activationLinkNotValid());
 
@@ -147,7 +148,7 @@ exports.activateEmail = async (req, res, next) => {
 exports.activateEmailResend = async (req, res, next) => {
   const {email} = req.body;
 
-  const isResendSuccess = await service.resendActivationEmail(email);
+  const isResendSuccess = await AuthServiceInstance.resendActivationMail(email);
 
   if (!isResendSuccess) return next(errors.resendEmailNotSuccess());
 

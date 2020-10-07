@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const config = require('../configs');
 
-const ActivationCodeSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   email: {
     type: String,
     required: true,
@@ -17,4 +17,4 @@ const ActivationCodeSchema = new mongoose.Schema({
   },
 });
 
-module.exports = mongoose.model('ActivationCode', ActivationCodeSchema);
+module.exports = mongoose.model('ActivationCode', schema);

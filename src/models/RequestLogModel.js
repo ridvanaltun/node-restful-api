@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const ENUMS = require('../enums');
 
-const requestLogSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   type: {
     type: String,
     enum: [...ENUMS.HTTP_METHODS],
@@ -47,9 +47,9 @@ const requestLogSchema = new mongoose.Schema({
 });
 
 // pagination support
-requestLogSchema.plugin(mongoosePaginate);
+schema.plugin(mongoosePaginate);
 
 // remove version key
-requestLogSchema.set('versionKey', false);
+schema.set('versionKey', false);
 
-module.exports = mongoose.model('RequestLog', requestLogSchema);
+module.exports = mongoose.model('RequestLog', schema);

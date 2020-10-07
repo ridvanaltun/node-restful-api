@@ -9,7 +9,7 @@ const roles = require('../roles');
 const {access, refresh} = require('../configs').secrets.jwt;
 const {accessTokenLife, refreshTokenLife} = require('../configs').jwt;
 
-const userSchema = new mongoose.Schema({
+const schema = new mongoose.Schema({
   username: {
     type: String,
     trim: true,
@@ -55,42 +55,42 @@ const userSchema = new mongoose.Schema({
 });
 
 // pagination support
-userSchema.plugin(mongoosePaginate);
+schema.plugin(mongoosePaginate);
 
 // unique validator support
-userSchema.plugin(uniqueValidator, {message: '{PATH} is already taken.'});
+schema.plugin(uniqueValidator, {message: '{PATH} is already taken.'});
 
 // this will add created_at and updated_at timestamps
-userSchema.set('timestamps', {createdAt: 'created_at', updatedAt: 'updated_at'});
+schema.set('timestamps', {createdAt: 'created_at', updatedAt: 'updated_at'});
 
 // check password is correct or not
-userSchema.methods.isPasswordCorrect = async function(password) {
+schema.methods.isPasswordCorrect = async function(password) {
   return await bcrypt.compare(password, this.password);
 };
 
 // set user password
-userSchema.methods.setPassword = async function(password) {
+schema.methods.setPassword = async function(password) {
   this.password = await bcrypt.hash(password, 10);
 };
 
 // check admin role
-userSchema.methods.isAdmin = function() {
+schema.methods.isAdmin = function() {
   return this.role === 'admin';
 };
 
 // check user role
-userSchema.methods.isUser = function() {
+schema.methods.isUser = function() {
   return this.role === 'user';
 };
 
 // returns access control object
 // ex: user.getAccessController().updateOwn('profile').granted // true or false
-userSchema.methods.getAccessController = function() {
+schema.methods.getAccessController = function() {
   return roles.can(this.role);
 };
 
 // returns profile object
-userSchema.methods.toProfileJSON = function() {
+schema.methods.toProfileJSON = function() {
   return {
     id: this._id,
     role: this.role,
@@ -105,7 +105,7 @@ userSchema.methods.toProfileJSON = function() {
 };
 
 // generates jwt token
-userSchema.methods.generateJWT = function() {
+schema.methods.generateJWT = function() {
   return {
     access: jwt.sign({id: this._id, role: this.role}, access, {expiresIn: accessTokenLife}),
     refresh: jwt.sign({id: this._id, role: this.role}, refresh, {expiresIn: refreshTokenLife}),
@@ -113,7 +113,7 @@ userSchema.methods.generateJWT = function() {
 };
 
 // follow given user
-userSchema.methods.follow = function(id) {
+schema.methods.follow = function(id) {
   if (this.followings.indexOf(id) === -1) {
     this.followings.push(id);
   }
@@ -122,16 +122,16 @@ userSchema.methods.follow = function(id) {
 };
 
 // unfollow given user
-userSchema.methods.unfollow = function(id) {
+schema.methods.unfollow = function(id) {
   this.followings.remove(id);
   return this.save();
 };
 
 // are we following given user
-userSchema.methods.isFollowing = function(id) {
+schema.methods.isFollowing = function(id) {
   return this.followings.some(function(followId) {
     return followId.toString() === id.toString();
   });
 };
 
-module.exports = mongoose.model('User', userSchema);
+module.exports = mongoose.model('User', schema);

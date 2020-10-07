@@ -1,18 +1,27 @@
-const ActivationCode = require('mongoose').model('ActivationCode');
-const User = require('mongoose').model('User');
-const EmailService = require('./emailService');
 const cryptoRandomString = require('crypto-random-string');
 
+// models
+const User = require('mongoose').model('User');
+const ActivationCode = require('mongoose').model('ActivationCode');
+
+// services
+const MailService = require('./MailService');
+
 /**
- * Auth service
+ * Auth Service
  */
 class AuthService {
   /**
-   * Creates activation code
-   *
-   * @param   {string}  email  User email address
-   *
-   * @return  {string}         Activation code
+   * @description Create service instances
+   */
+  constructor() {
+    this.MailServiceInstance = new MailService();
+  }
+
+  /**
+   * @description Creates activation code
+   * @param   {string}  email User email address
+   * @return  {string}        Activation code
    */
   async createActivationCode(email) {
     const code = cryptoRandomString({length: 6});
@@ -21,11 +30,9 @@ class AuthService {
   }
 
   /**
-   * Validates activation link
-   *
+   * @description Validates activation link
    * @param   {string}  userId  User id
    * @param   {string}  code    A random generated code for user
-   *
    * @return  {boolean}         Link valid or not
    */
   async validateActivationLink(userId, code) {
@@ -62,13 +69,11 @@ class AuthService {
   }
 
   /**
-   * Resends activation email
-   *
-   * @param   {string}  email  User email
-   *
-   * @return  {boolean}        Success or not
+   * @description Resends activation email
+   * @param   {string}  email User email
+   * @return  {boolean}       Success or not
    */
-  async resendActivationEmail(email) {
+  async resendActivationMail(email) {
     // todo: return verbose for display error reasons in controller
     try {
       // find user by email
@@ -84,11 +89,10 @@ class AuthService {
       const activationCode = await this.createActivationCode(user.email);
 
       // send email
-      const emailClient = new EmailService();
       const fullName = `${user.first_name} ${user.last_name}`;
 
       // note: removed await because email server can be slow
-      emailClient.sendActivationLink(user.email, fullName, user._id, activationCode);
+      this.MailServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode);
 
       return true;
     } catch (error) {

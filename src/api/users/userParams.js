@@ -1,18 +1,17 @@
+// services
 const {UserService} = require('../../services');
-
-const service = new UserService();
-
+const UserServiceInstance = new UserService();
 
 // bind user to req.profile
 exports.username = async (req, res, next, username) => {
   // get user
-  const {user, error} = await service.getOneByUsername(username);
+  const {data, success, error} = await UserServiceInstance.getByUsername(username);
 
   // handle errors
-  if (error) return next(error);
+  if (!success) return next(error);
 
   // bind
-  req.profile = user;
+  req.profile = data;
 
   return next();
 };

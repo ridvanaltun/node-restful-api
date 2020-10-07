@@ -1,20 +1,29 @@
-const User = require('mongoose').model('User');
 const createError = require('http-errors');
-const EmailService = require('./emailService');
+const {paginateQueries, response} = require('../utils');
+
+// models
+const User = require('mongoose').model('User');
+
+// services
+const MailService = require('./MailService');
 const AuthService = require('./authService');
-const {paginateQueries} = require('../utils');
 
 /**
- * User service
+ * User Service
  */
 class UserService {
   /**
-   * Fetch all users
-   *
-   * @param   {object}  query  Request query
-   *
-   * @return  {onject}         Users
-   * @throws  {Error}
+   * @description Create service instances
+   */
+  constructor() {
+    this.MailServiceInstance = new MailService();
+    this.AuthServiceInstance = new AuthService();
+  }
+
+  /**
+   * @description Fetch all users
+   * @param   {object}  query Request query
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
   async getAll(query) {
     try {
@@ -25,59 +34,50 @@ class UserService {
       const usersProfile = paginate.users.map((user) => user.toProfileJSON());
       paginate.users = usersProfile;
 
-      return {users: paginate};
+      return response.sendSuccess(paginate);
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Fetch one user by username
-   *
+   * @description Retrieve one user by username
    * @param   {string}  username  Username
-   *
-   * @return  {object}            User
-   * @throws  {Error}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
-  async getOneByUsername(username) {
+  async getByUsername(username) {
     try {
       const user = await User.findOne({username});
 
-      if (!user) return {error: createError.NotFound('User not found')};
+      if (!user) return response.sendError(createError.NotFound('User not found'));
 
-      return {user: user.toProfileJSON()};
+      return response.sendSuccess(user.toProfileJSON());
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Fetch one user by id
-   *
+   * @description Fetch one user by id
    * @param   {string}  id  User id
-   *
-   * @return  {object}      User
-   * @throws  {Error}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
-  async getOneById(id) {
+  async getById(id) {
     try {
       const user = await User.findById(id);
 
-      if (!user) return {error: createError.NotFound('User not found')};
+      if (!user) return response.sendError(createError.NotFound('User not found'));
 
-      return {user: user.toProfileJSON()};
+      return response.sendSuccess(user.toProfileJSON());
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Create an user
-   *
+   * @description Create an user
    * @param   {object}  body  User body
-   *
-   * @return  {object}        Serilized user object, access and refresh token
-   * @throws  {Error}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
   async create(body) {
     try {
@@ -89,86 +89,83 @@ class UserService {
       const {access, refresh} = user.generateJWT();
 
       // create activation code
-      const authClient = new AuthService();
-      const activationCode = await authClient.createActivationCode(user.email);
+      const activationCode = await this.AuthServiceInstance.createActivationCode(user.email);
 
       // send email
-      const emailClient = new EmailService();
       const fullName = `${user.first_name} ${user.last_name}`;
 
       // note: removed await because email server can be slow
-      emailClient.sendActivationLink(user.email, fullName, user._id, activationCode);
+      this.MailServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode);
 
-      return {user: user.toProfileJSON(), access, refresh};
+      return response.sendSuccess({user: user.toProfileJSON(), access, refresh});
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Update an user
-   *
+   * @description Update an user
    * @param   {string}  username  Username
    * @param   {object}  body      User body
-   *
-   * @return  {object}            User
-   * @throws  {Error}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
   async update({username, body}) {
     try {
       const user = await User.findOneAndUpdate({username}, body, {new: true});
-      return {user: user.toProfileJSON()};
+      return response.sendSuccess(user.toProfileJSON());
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Delete an user
-   *
+   * @description Delete an user
    * @param   {string}  username  Username
-   *
    * @return  {boolean}           false
-   * @throws  {Error}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
   async delete(username) {
     try {
       await User.deleteOne({username});
-      return {error: false};
+      return response.sendSuccess(true);
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Update an user
-   *
-   * @param   {string}  username      Username
-   * @param   {string}  newPassword   New password
-   *
-   * @return  {object}                User
-   * @throws  {Error}
+   * @description Update an user
+   * @param   {string}  username    Username
+   * @param   {string}  newPassword New password
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
   async changePassword(username, newPassword) {
     try {
       const user = await User.findOne({username});
       await user.setPassword(newPassword);
       await user.save();
-      return {user: user.toProfileJSON()};
+
+      return response.sendSuccess(user.toProfileJSON());
     } catch (error) {
-      return {error};
+      return response.sendError(error);
     }
   }
 
   /**
-   * Follow an user
-   *
-   * @param   {string}  followerUserId    Follower user id
-   * @param   {string}  targetUserId      Target user id
+   * @description Follow an user
+   * @param {string}  followerUserId    Follower user id
+   * @param {string}  targetUserId      Target user id
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
   async followUser(followerUserId, targetUserId) {
-    const user = await User.findById(followerUserId);
-    user.follow(targetUserId);
+    try {
+      const user = await User.findById(followerUserId);
+      user.follow(targetUserId);
+
+      return response.sendSuccess(true);
+    } catch (error) {
+      return response.sendError(error);
+    }
   }
 
   /**
@@ -176,10 +173,17 @@ class UserService {
    *
    * @param   {string}  unfollowerUserId  Unfollower user id
    * @param   {string}  targetUserId      Target user id
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
   async unfollowUser(unfollowerUserId, targetUserId) {
-    const user = await User.findById(unfollowerUserId);
-    user.unfollow(targetUserId);
+    try {
+      const user = await User.findById(unfollowerUserId);
+      user.unfollow(targetUserId);
+
+      return response.sendSuccess(true);
+    } catch (error) {
+      return response.sendError(error);
+    }
   }
 }
 

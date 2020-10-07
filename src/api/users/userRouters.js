@@ -22,7 +22,7 @@ users.route('/:username')
 users.route('/:username/password')
     .post(auth.required, validators.updatePassword, controllers.updatePassword);
 
-users.route('/:username/follow')
+users.route('/:username/follows')
     .post(auth.required, controllers.followUser)
     .delete(auth.required, controllers.unfollowUser);
 
