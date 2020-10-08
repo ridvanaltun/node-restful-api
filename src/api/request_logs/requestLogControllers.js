@@ -11,11 +11,5 @@ exports.listLogs = async (req, res, next) => {
 }
 
 exports.readLog = async (req, res, next) => {
-  const { logId } = req.params
-
-  const { data, success, error } = await RequestLogServiceInstance.getById(logId)
-
-  if (!success) return next(error)
-
-  res.json(data)
+  res.json(req.requestLog)
 }
