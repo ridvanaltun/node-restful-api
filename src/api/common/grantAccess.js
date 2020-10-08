@@ -1,12 +1,12 @@
 const createError = require('http-errors')
-const roles = require('../../roles')
+const permissions = require('../../permissions')
 
 // validates given permission
 // ex: grantAccess("readOwn", "profile")
 module.exports = function (action, resource) {
   return (req, res, next) => {
     // check permission
-    const permission = roles.can(req.payload.role)[action](resource)
+    const permission = permissions.can(req.payload.role)[action](resource)
 
     // permission not granted
     if (!permission.granted) {
@@ -15,6 +15,6 @@ module.exports = function (action, resource) {
       ))
     }
 
-    return next()
+    next()
   }
 }

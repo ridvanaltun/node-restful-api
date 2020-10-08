@@ -1,26 +1,17 @@
 const express = require('express')
 const common = require('../common')
 const auth = require('../common/auth')
-const grantAccess = require('../common/grantAccess')
+const { authRequestLog } = require('../common/access')
 const { listLogs, readLog } = require('./requestLogControllers')
 
 const requestLogs = express.Router()
 
 requestLogs
   .route('/')
-  .get(
-    auth.required,
-    grantAccess('readAny', 'request_log'),
-    common.validators.pagination,
-    listLogs
-  )
+  .get(auth.required, authRequestLog('readAny'), common.validators.pagination, listLogs)
 
 requestLogs
   .route('/:logId')
-  .get(
-    auth.required,
-    grantAccess('readAny', 'request_log'),
-    readLog
-  )
+  .get(auth.required, authRequestLog('readAny'), readLog)
 
 module.exports = () => requestLogs

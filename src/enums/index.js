@@ -8,6 +8,14 @@ module.exports = {
   API: {
     PREFIX: '/api'
   },
+  ROLE: {
+    BASIC: 'basic',
+    ADMIN: 'admin'
+  },
+  RESOURCE: {
+    PROFILE: 'profile',
+    REQUEST_LOG: 'request-log'
+  },
   HTTP_METHODS: [
     'GET',
     'POST',

@@ -3,7 +3,7 @@ const mongoosePaginate = require('mongoose-paginate-v2')
 const uniqueValidator = require('mongoose-unique-validator')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const roles = require('../roles')
+const permissions = require('../permissions')
 
 // configs
 const { access, refresh } = require('../configs').secrets.jwt
@@ -83,7 +83,7 @@ schema.methods.isEmailVerified = function () {
 // returns access control object
 // ex: user.getPermissions().updateOwn('profile').granted // true or false
 schema.methods.getPermissions = function () {
-  return roles.can(this.role)
+  return permissions.can(this.role)
 }
 
 schema.methods.toProfileJSON = function () {
