@@ -1,8 +1,8 @@
 const express = require('express')
 const validators = require('./userValidators')
-const params = require('./userParams')
 const common = require('../common')
 const auth = require('../common/auth')
+const { setProfile } = require('./userPreloaders')
 const {
   listUsers,
   createUser,
@@ -10,20 +10,12 @@ const {
   updateUser,
   deleteUser,
   updatePassword,
+  listFollows,
   followUser,
   unfollowUser
 } = require('./userControllers')
 
 const users = express.Router()
-
-// todo: routers i router, controllers i controller, validators i validator olarak cevirebilirim
-// todo: controller on ekini kaldir sadece fonksiyon adini kullan
-// todo: follows kismina get istegi getir, kullaniciyi follow eden profiller listelensin
-
-// preload user profile on routes with ':username' to req.profile
-// todo: bunu bu sayfa icinde bir middleware haline getir, adi: setProfile olsun
-// todo: yukarida taski yapinca params kullanmaya gerek kalmiyor, silinebilir.
-users.param('username', params.username)
 
 users
   .route('/')
@@ -42,7 +34,8 @@ users
 
 users
   .route('/:username/follows')
-  .post(auth.required, followUser)
-  .delete(auth.required, unfollowUser)
+  .get(auth.optional, setProfile, listFollows)
+  .post(auth.required, setProfile, followUser)
+  .delete(auth.required, setProfile, unfollowUser)
 
 module.exports = () => users

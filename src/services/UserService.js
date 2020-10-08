@@ -152,12 +152,46 @@ class UserService {
   }
 
   /**
-   * @description Follow an user
-   * @param {string}  followerUserId    Follower user id
-   * @param {string}  targetUserId      Target user id
+   * @description List follows for guests
+   * @param {string}  id  User id
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
-  async followUser (followerUserId, targetUserId) {
+  async listFollowsForGuest (id) {
+    try {
+      const user = await User.findById(id)
+      const follows = await user.listFollowingsForGuest()
+
+      return response.sendSuccess(follows)
+    } catch (error) {
+      return response.sendError(error)
+    }
+  }
+
+  /**
+   * @description List follows for authenticated user
+   * @param {string}  id        User id
+   * @param {string}  username  Who request this function
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
+   */
+  async listFollowsFor (id, username) {
+    try {
+      const whoAsk = await User.findOne({ username })
+      const user = await User.findById(id)
+      const follows = await user.listFollowingsFor(whoAsk)
+
+      return response.sendSuccess(follows)
+    } catch (error) {
+      return response.sendError(error)
+    }
+  }
+
+  /**
+   * @description Follow an user
+   * @param {string}  targetUserId      Target user id
+   * @param {string}  followerUserId    Follower user id
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
+   */
+  async followUser (targetUserId, followerUserId) {
     try {
       const user = await User.findById(followerUserId)
       user.follow(targetUserId)
@@ -170,11 +204,11 @@ class UserService {
 
   /**
    * @description Unfollow an user
-   * @param   {string}  unfollowerUserId  Unfollower user id
    * @param   {string}  targetUserId      Target user id
+   * @param   {string}  unfollowerUserId  Unfollower user id
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
-  async unfollowUser (unfollowerUserId, targetUserId) {
+  async unfollowUser (targetUserId, unfollowerUserId) {
     try {
       const user = await User.findById(unfollowerUserId)
       user.unfollow(targetUserId)

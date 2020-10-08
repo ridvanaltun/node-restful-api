@@ -16,6 +16,7 @@ exports.required = async (req, res, next) => {
 
     // bind payload to req.paylaod
     req.payload = decoded
+    req.authenticated = true
 
     // keep user session
     const user = await User.findById(decoded.id)
@@ -52,6 +53,7 @@ exports.optional = async (req, res, next) => {
 
       // bind user session to request
       req.user = user
+      req.authenticated = true
 
       return next()
     } catch (err) {

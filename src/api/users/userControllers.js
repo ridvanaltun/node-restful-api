@@ -39,6 +39,7 @@ exports.readUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   const { username } = req.params
 
+  // todo: remove req.user, delegate to permissions
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized())
 
@@ -52,6 +53,7 @@ exports.updateUser = async (req, res, next) => {
 exports.deleteUser = async (req, res, next) => {
   const { username } = req.params
 
+  // todo: remove req.user, delegate to permissions
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized())
 
@@ -67,6 +69,7 @@ exports.updatePassword = async (req, res, next) => {
   const { username } = req.params
   const { password, new_password: newPassword } = req.body
 
+  // todo: remove req.user, delegate to permissions
   // usernames not match, means this user not belong to token owner
   if (username !== req.user.username) return next(errors.userUnauthorized())
 
@@ -81,6 +84,30 @@ exports.updatePassword = async (req, res, next) => {
   if (!success) return next(error)
 
   res.json(data)
+}
+
+exports.listFollows = async (req, res, next) => {
+  if (req.authenticated) {
+    const { username } = req.payload
+    const { id } = req.profile
+
+    // do it
+    const { success, data, error } = await UserServiceInstance.listFollowsFor(id, username)
+
+    if (!success) return next(error)
+
+    return res.json(data)
+  }
+
+  // guest user
+  const { id } = req.profile
+
+  // do it
+  const { success, data, error } = await UserServiceInstance.listFollowsForGuest(id)
+
+  if (!success) return next(error)
+
+  return res.json(data)
 }
 
 exports.followUser = async (req, res, next) => {
@@ -102,11 +129,11 @@ exports.unfollowUser = async (req, res, next) => {
   // target user
   const { id: targetUserId } = req.profile
 
-  // follower user
-  const { id: followerUserId } = req.payload
+  // unfollower user
+  const { id: unfollowerUserId } = req.payload
 
   // do it
-  const { success, error } = await UserServiceInstance.unfollowUser(targetUserId, followerUserId)
+  const { success, error } = await UserServiceInstance.unfollowUser(targetUserId, unfollowerUserId)
 
   if (!success) return next(error)
 

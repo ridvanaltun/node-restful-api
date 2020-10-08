@@ -100,6 +100,25 @@ schema.methods.toProfileJSON = function () {
   }
 }
 
+schema.methods.toProfileJSONFor = function (user) {
+  return {
+    email: this.email,
+    username: this.username,
+    first_name: this.first_name,
+    last_name: this.last_name,
+    following: user ? user.isFollowing(this._id) : false
+  }
+}
+
+schema.methods.toProfileJSONForGuest = function () {
+  return {
+    email: this.email,
+    username: this.username,
+    first_name: this.first_name,
+    last_name: this.last_name
+  }
+}
+
 schema.methods.generateJWT = function () {
   return {
     access: jwt.sign(
@@ -132,6 +151,16 @@ schema.methods.isFollowing = function (id) {
   return this.followings.some(function (followId) {
     return followId.toString() === id.toString()
   })
+}
+
+schema.methods.listFollowingsForGuest = async function () {
+  const result = await this.populate('followings').execPopulate()
+  return result.followings.map(following => following.toProfileJSONForGuest())
+}
+
+schema.methods.listFollowingsFor = async function (user) {
+  const result = await this.populate('followings').execPopulate()
+  return result.followings.map(following => following.toProfileJSONFor(user))
 }
 
 module.exports = mongoose.model('User', schema)
