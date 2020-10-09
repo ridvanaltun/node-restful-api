@@ -91,11 +91,14 @@ class UserService {
       // create activation code
       const activationCode = await this.AuthServiceInstance.createMailActivationCode(user.email)
 
-      // send email
+      // prepare data for send email
       const fullName = `${user.first_name} ${user.last_name}`
 
-      // note: removed await because email server can be slow
-      this.AuthServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode)
+      // send email
+      const { success, error } = await this.AuthServiceInstance.sendActivationMail(user.email, fullName, user._id, activationCode)
+
+      // return error, sending activation mail fails
+      if (!success) return response.sendError(error)
 
       return response.sendSuccess({ user: user.toProfileJSON(), access, refresh })
     } catch (error) {
@@ -168,9 +171,9 @@ class UserService {
   }
 
   /**
-   * @description List follows for authenticated user
-   * @param {string}  id        User id
-   * @param {string}  username  Who request this function
+   * @description List follows for an user
+   * @param {string}  id        User id, this user's follow list will return
+   * @param {string}  username  Username for followings list
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
   async listFollowsFor (id, username) {

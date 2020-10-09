@@ -14,8 +14,4 @@ exports.userNotFound = () => createError.NotFound('User not found')
 
 exports.passwordIncorrect = () => createError.BadRequest('Password incorrect')
 
-exports.activationLinkNotValid = () => createError.BadRequest('Activation link not valid')
-
-exports.resendEmailNotSuccess = () => createError.BadRequest('Email can\'t resend')
-
 exports.refreshTokenNotFound = () => createError.Forbidden('Refresh token not found')

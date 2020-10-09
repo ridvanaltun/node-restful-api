@@ -40,7 +40,8 @@ class MailService {
   async sendMail (from, to, subject, mail) {
     try {
       // send mail
-      await transporter
+      // note: remove await for speed concerns
+      transporter
         .sendMail({
           from,
           to,
@@ -48,7 +49,7 @@ class MailService {
           html: mail
         })
     } catch (error) {
-      // todo: handle email errors
+      // todo: handle errors
       console.log(error)
     }
   }

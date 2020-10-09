@@ -139,19 +139,19 @@ exports.createToken = (req, res, next) => {
 exports.activateEmail = async (req, res, next) => {
   const { uid, token } = req.body
 
-  const isLinkValid = await AuthServiceInstance.validateActivationMailLink(uid, token)
+  const { success, error } = await AuthServiceInstance.validateActivationMailLink(uid, token)
 
-  if (!isLinkValid) return next(errors.activationLinkNotValid())
+  if (!success) return next(error)
 
-  res.status(200).end()
+  res.end()
 }
 
 exports.activateEmailResend = async (req, res, next) => {
   const { email } = req.body
 
-  const isResendSuccess = await AuthServiceInstance.resendActivationMail(email)
+  const { success, error } = await AuthServiceInstance.resendActivationMail(email)
 
-  if (!isResendSuccess) return next(errors.resendEmailNotSuccess())
+  if (!success) return next(error)
 
-  res.status(200).end()
+  res.end()
 }
