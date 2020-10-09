@@ -1,9 +1,10 @@
 const jwt = require('jsonwebtoken')
 const createError = require('http-errors')
-const User = require('mongoose').model('User')
 const configs = require('../../configs')
 
-// bind jwt payload to req.payload
+// allow valid access token owners only
+// if access token not valid returns 403
+// if access token valid fills req.payload with access token payload
 exports.required = async (req, res, next) => {
   const accessToken = req.headers['x-access-token']
 
@@ -14,18 +15,11 @@ exports.required = async (req, res, next) => {
     // verify access token
     const decoded = jwt.verify(accessToken, configs.secrets.jwt.access)
 
-    // bind payload to req.paylaod
+    // bind jwt payload to req.paylaod
     req.payload = decoded
+
+    // mark authentication status
     req.authenticated = true
-
-    // keep user session
-    const user = await User.findById(decoded.id)
-
-    // if user not exist throw error
-    if (!user) return next(createError.Unauthorized('Access token owner not found'))
-
-    // bind user session to request
-    req.user = user
 
     return next()
   } catch (err) {
@@ -33,7 +27,10 @@ exports.required = async (req, res, next) => {
   }
 }
 
-// bind jwt payload to req.payload if exist
+// allow valid access token owners and guests (not token owners)
+// if access token not valid returns 403
+// if access token valid fills req.payload with access token payload
+// if access token not provided passes to next middleware
 exports.optional = async (req, res, next) => {
   const accessToken = req.headers['x-access-token']
 
@@ -42,17 +39,10 @@ exports.optional = async (req, res, next) => {
     // verify access token
       const decoded = jwt.verify(accessToken, configs.secrets.jwt.access)
 
-      // bind payload to req.paylaod
+      // bind jwt payload to req.paylaod
       req.payload = decoded
 
-      // keep user session
-      const user = await User.findById(decoded.id)
-
-      // if user not exist throw error
-      if (!user) return next(createError.Unauthorized('Access token owner not found'))
-
-      // bind user session to request
-      req.user = user
+      // mark authentication status
       req.authenticated = true
 
       return next()
@@ -61,5 +51,5 @@ exports.optional = async (req, res, next) => {
     }
   }
 
-  return next()
+  next()
 }

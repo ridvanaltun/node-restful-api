@@ -1,5 +1,6 @@
 const express = require('express')
 const validators = require('./userValidators')
+const errors = require('./userErrors')
 const common = require('../common')
 const auth = require('../common/auth')
 const { setProfile } = require('./userPreloaders')
@@ -17,6 +18,21 @@ const {
 
 const users = express.Router()
 
+// compare token username and parameter username and enforce to pass next middlewares just same ones
+const authUser = (req, res, next) => {
+  // means a valid access token issued
+  // if token not provided automaticly pass the next middleware
+  if (req.authenticated) {
+    const { username: targetUsername } = req.params
+    const { username: tokenUsername } = req.payload
+
+    // user not same, unauthorized, returns 401
+    if (targetUsername !== tokenUsername) return next(errors.userUnauthorized())
+  }
+
+  next()
+}
+
 users
   .route('/')
   .get(common.validators.pagination, listUsers)
@@ -25,12 +41,12 @@ users
 users
   .route('/:username')
   .get(readUser)
-  .patch(auth.required, validators.updateUser, updateUser)
-  .delete(auth.required, deleteUser)
+  .patch(auth.required, authUser, validators.updateUser, updateUser)
+  .delete(auth.required, authUser, deleteUser)
 
 users
   .route('/:username/password')
-  .post(auth.required, validators.updatePassword, updatePassword)
+  .post(auth.required, authUser, validators.updatePassword, updatePassword)
 
 users
   .route('/:username/follows')

@@ -39,10 +39,6 @@ exports.readUser = async (req, res, next) => {
 exports.updateUser = async (req, res, next) => {
   const { username } = req.params
 
-  // todo: remove req.user, delegate to permissions
-  // usernames not match, means this user not belong to token owner
-  if (username !== req.user.username) return next(errors.userUnauthorized())
-
   const { data, success, error } = await UserServiceInstance.update(username, req.body)
 
   if (!success) return next(error)
@@ -52,10 +48,6 @@ exports.updateUser = async (req, res, next) => {
 
 exports.deleteUser = async (req, res, next) => {
   const { username } = req.params
-
-  // todo: remove req.user, delegate to permissions
-  // usernames not match, means this user not belong to token owner
-  if (username !== req.user.username) return next(errors.userUnauthorized())
 
   const { success, error } = await UserServiceInstance.delete(username)
 
@@ -68,10 +60,6 @@ exports.deleteUser = async (req, res, next) => {
 exports.updatePassword = async (req, res, next) => {
   const { username } = req.params
   const { password, new_password: newPassword } = req.body
-
-  // todo: remove req.user, delegate to permissions
-  // usernames not match, means this user not belong to token owner
-  if (username !== req.user.username) return next(errors.userUnauthorized())
 
   // validate password
   const isPasswordCorrect = await req.user.isPasswordCorrect(password)

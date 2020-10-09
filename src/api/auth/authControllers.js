@@ -110,6 +110,7 @@ exports.login = async (req, res, next) => {
 
 exports.logout = (req, res, next) => {
   // todo: add logic
+  // todo: add blacklist for jwt refresh tokens
 }
 
 exports.createToken = (req, res, next) => {
