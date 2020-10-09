@@ -6,6 +6,7 @@ const consoleLogErrors = require('./consoleLogErrors')
 const removeEmptyProperties = require('./removeEmptyProperties')
 const requestLogger = require('./requestLogger')
 const rateLimitterMongo = require('./rateLimitterMongo')
+const bindReq = require('./bindReq')
 
 module.exports = {
   ignoreFavicon,
@@ -15,5 +16,6 @@ module.exports = {
   consoleLogErrors,
   removeEmptyProperties,
   requestLogger,
-  rateLimitterMongo
+  rateLimitterMongo,
+  bindReq
 }

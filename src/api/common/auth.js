@@ -18,6 +18,9 @@ exports.required = async (req, res, next) => {
     // bind jwt payload to req.paylaod
     req.payload = decoded
 
+    // bind access token to req.tokens
+    req.tokens = { ...req.tokens, access: accessToken }
+
     // mark authentication status
     req.authenticated = true
 
@@ -41,6 +44,9 @@ exports.optional = async (req, res, next) => {
 
       // bind jwt payload to req.paylaod
       req.payload = decoded
+
+      // bind access token to req.tokens
+      req.tokens = { ...req.tokens, access: accessToken }
 
       // mark authentication status
       req.authenticated = true

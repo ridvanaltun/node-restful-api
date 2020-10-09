@@ -29,6 +29,12 @@ module.exports = {
     username: process.env.MONGO_USERNAME,
     password: process.env.MONGO_PASSWORD
   },
+  redis: {
+    host: process.env.REDIS_HOST,
+    port: parseInt(process.env.REDIS_PORT, 10),
+    blackListKey: process.env.REDIS_BLACKLIST_KEY,
+    password: process.env.REDIS_PASSWORD
+  },
   logs: {
     level: process.env.LOG_LEVEL
   },

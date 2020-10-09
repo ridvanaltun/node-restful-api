@@ -14,4 +14,6 @@ exports.userNotFound = () => createError.NotFound('User not found')
 
 exports.passwordIncorrect = () => createError.BadRequest('Password incorrect')
 
-exports.refreshTokenNotFound = () => createError.Forbidden('Refresh token not found')
+exports.refreshTokenRevoked = () => createError.Forbidden('Refresh token revoked')
+
+exports.accessTokenMalformed = () => createError.Forbidden('Access token malformed')
