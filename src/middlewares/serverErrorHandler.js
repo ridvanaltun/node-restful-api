@@ -1,11 +1,8 @@
-const ENUMS = require('../enums')
-const configs = require('../configs')
-
-const isDev = configs.app.environment === ENUMS.APP.MODES.DEV
+const { dev: devMode } = require('../configs').app
 
 // Server error handler
 module.exports = (err, req, res, next) => {
   res.status(err.status || 500)
-  if (isDev) res.json({ error: err })
+  if (devMode) res.json({ error: err })
   res.end()
 }

@@ -2,7 +2,7 @@ const RequestLog = require('mongoose').model('RequestLog')
 const requestIp = require('request-ip')
 
 module.exports = (returnReqId) => {
-  return (req, res, next) => {
+  return async (err, req, res, next) => {
     const log = new RequestLog({
       type: req.method,
       headers: req.headers,
@@ -15,10 +15,13 @@ module.exports = (returnReqId) => {
       refresh_token: req.headers['x-refresh-token']
     })
 
-    log.save((err, data) => {
-      if (err) return next(err)
+    try {
+      const data = await log.save()
       if (returnReqId) res.set('X-Request-Id', data._id)
-      next()
-    })
+    } catch (error) {
+      return next(error)
+    }
+
+    next(err)
   }
 }

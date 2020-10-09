@@ -77,11 +77,6 @@ module.exports = async ({ app, agenda }) => {
    * Logging
    */
 
-  // log requests
-  if (configs.requestLogs.enable) {
-    app.use(middlewares.requestLogger(configs.requestLogs.returnIdEnable))
-  }
-
   // node.js logger
   // normalde bu kütüphaneyi sadece import ederek kullanabiliyoruz
   // sadece import ederek kullandığımız node'un built-in http modülünü kullanıyor
@@ -125,12 +120,16 @@ module.exports = async ({ app, agenda }) => {
    * Error Handling
    */
 
-  // log errors to console
-  app.use(middlewares.consoleLogErrors)
-
-  // 404
-  // raise when path not found
+  // raise 404 when path not found
   app.use(middlewares.notFoundHandler)
+
+  // log errors to console
+  const { dev: devMode } = configs.app
+  if (devMode) app.use(middlewares.consoleLogErrors)
+
+  // log request when an error occurred
+  const { enable: isRequestLogEnabled, returnIdEnable: isReturnIdEnabled } = configs.requestLogs
+  if (isRequestLogEnabled) app.use(middlewares.requestLogger(isReturnIdEnabled))
 
   // handle client errors
   app.use(middlewares.clientErrorHandler)
