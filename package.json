@@ -62,13 +62,30 @@
     "request-ip": "^2.1.3",
     "winston": "^3.3.3"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ridvanaltun/node-restful-api.git"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "*.js": [
+      "./node_modules/.bin/eslint — fix --no-error-on-unmatched-pattern",
+      "git add"
+    ]
+  },
+  "commitlint": {
+    "extends": [
+      "@commitlint/config-conventional"
+    ]
+  },
   "config": {
     "commitizen": {
       "path": "./node_modules/cz-conventional-changelog"
     }
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/ridvanaltun/node-restful-api.git"
   }
 }
