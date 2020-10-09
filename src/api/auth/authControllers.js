@@ -32,6 +32,7 @@ const limiterConsecutiveFailsByUsernameAndIP = new RateLimiterMongo({
 
 const getUsernameIPkey = (username, ip) => `${username}_${ip}`
 
+// todo: move db process to services
 exports.login = async (req, res, next) => {
   const { username, password } = req.body
 
@@ -89,11 +90,13 @@ exports.login = async (req, res, next) => {
 
     const { access, refresh } = user.generateJWT()
 
-    // give tokens
-    res.set('X-Access-Token', access)
-    res.set('X-Refresh-Token', refresh)
-
-    res.json(user.toProfileJSON())
+    res.json({
+      user: user.toProfileJSON(),
+      tokens: {
+        access_token: access,
+        refresh_token: refresh
+      }
+    })
   } else {
     // when password wrong
     const [err] = await to(limiterConsecutiveFailsByUsernameAndIP.consume(usernameIPkey))
