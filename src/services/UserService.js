@@ -139,12 +139,18 @@ class UserService {
   /**
    * @description Update an user
    * @param   {string}  username    Username
+   * @param   {string}  password    Current password
    * @param   {string}  newPassword New password
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
    */
-  async changePassword (username, newPassword) {
+  async changePassword (username, password, newPassword) {
     try {
       const user = await User.findOne({ username })
+
+      const isPasswordCorrect = await user.isPasswordCorrect(password)
+
+      if (!isPasswordCorrect) return response.sendError(createError.BadRequest('Password wrong'))
+
       await user.setPassword(newPassword)
       await user.save()
 

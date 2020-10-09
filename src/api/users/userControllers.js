@@ -1,5 +1,3 @@
-const errors = require('./userErrors')
-
 // services
 const { UserService } = require('../../services')
 const UserServiceInstance = new UserService()
@@ -61,13 +59,7 @@ exports.updatePassword = async (req, res, next) => {
   const { username } = req.params
   const { password, new_password: newPassword } = req.body
 
-  // validate password
-  const isPasswordCorrect = await req.user.isPasswordCorrect(password)
-
-  // password not correct
-  if (!isPasswordCorrect) return next(errors.userPasswordWrong())
-
-  const { data, success, error } = await UserServiceInstance.changePassword(username, newPassword)
+  const { data, success, error } = await UserServiceInstance.changePassword(username, password, newPassword)
 
   if (!success) return next(error)
 
