@@ -15,9 +15,9 @@ exports.logout = celebrate({
 })
 
 exports.createToken = celebrate({
-  [Segments.HEADERS]: Joi.object().keys({
-    'x-refresh-token': Joi.string().required()
-  }).unknown()
+  [Segments.BODY]: Joi.object().keys({
+    refresh_token: Joi.string().required()
+  })
 })
 
 exports.activateEmail = celebrate({

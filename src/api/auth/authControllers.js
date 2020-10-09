@@ -121,16 +121,16 @@ exports.logout = async (req, res, next) => {
 
 // todo: add blacklist control
 exports.createToken = async (req, res, next) => {
-  const token = req.headers['x-refresh-token']
+  const { refresh_token: refreshToken } = req.body
 
   // blacklist control
-  const isRevoked = await req.blacklist.has(token)
+  const isRevoked = await req.blacklist.has(refreshToken)
 
   // refresh token revoked
   if (isRevoked) return next(errors.refreshTokenRevoked())
 
   // verify refresh token
-  jwt.verify(token, configs.secrets.jwt.refresh, (err, decoded) => {
+  jwt.verify(refreshToken, configs.secrets.jwt.refresh, (err, decoded) => {
     if (err) return next(err)
 
     const { id, role } = decoded
@@ -142,9 +142,10 @@ exports.createToken = async (req, res, next) => {
     const accessToken = jwt.sign({ id, role }, configs.secrets.jwt.access, accessTokenOptions)
     const refreshToken = jwt.sign({ id, role }, configs.secrets.jwt.refresh, refreshTokenOptions)
 
-    res.set('X-Access-Token', accessToken)
-    res.set('X-Refresh-Token', refreshToken)
-    res.end()
+    res.json({
+      access_token: accessToken,
+      refresh_token: refreshToken
+    })
   })
 }
 
