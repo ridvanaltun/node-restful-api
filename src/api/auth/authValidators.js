@@ -9,8 +9,8 @@ exports.login = celebrate({
 })
 
 exports.logout = celebrate({
-  [Segments.PARAMS]: Joi.object().keys({
-    id: Joi.string().required()
+  [Segments.BODY]: Joi.object().keys({
+    refresh_token: Joi.string().required()
   })
 })
 

@@ -108,16 +108,28 @@ exports.login = async (req, res, next) => {
   }
 }
 
-exports.logout = (req, res, next) => {
-  // todo: add logic
-  // todo: add blacklist for jwt refresh tokens
+exports.logout = async (req, res, next) => {
+  const { refresh_token: refreshToken } = req.body
+
+  // not allow jwt without exp
+  const ok = await req.blacklist.add(refreshToken)
+
+  if (!ok) return next(errors.accessTokenMalformed())
+
+  res.status(204).end()
 }
 
-exports.createToken = (req, res, next) => {
+// todo: add blacklist control
+exports.createToken = async (req, res, next) => {
   const token = req.headers['x-refresh-token']
 
-  if (typeof token === 'undefined') return next(errors.refreshTokenNotFound())
+  // blacklist control
+  const isRevoked = await req.blacklist.has(token)
 
+  // refresh token revoked
+  if (isRevoked) return next(errors.refreshTokenRevoked())
+
+  // verify refresh token
   jwt.verify(token, configs.secrets.jwt.refresh, (err, decoded) => {
     if (err) return next(err)
 

@@ -8,7 +8,7 @@ const configs = require('../configs')
 const enums = require('../enums')
 const routes = require('../api')
 
-module.exports = async ({ app, agenda }) => {
+module.exports = async ({ app, agenda, blacklist }) => {
   /**
    * General
    */
@@ -37,6 +37,9 @@ module.exports = async ({ app, agenda }) => {
   // remove empty properties from body, query and params
   // in this way we don't worry about the incomming data was empty or not
   app.use(middlewares.removeEmptyProperties())
+
+  // bind blacklist to request object
+  app.use(middlewares.bindReq('blacklist', blacklist))
 
   /**
    * Global Limitters
