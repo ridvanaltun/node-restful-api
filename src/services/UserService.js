@@ -100,7 +100,13 @@ class UserService {
       // return error, sending activation mail fails
       if (!success) return response.sendError(error)
 
-      return response.sendSuccess({ user: user.toProfileJSON(), access, refresh })
+      return response.sendSuccess({
+        user: user.toProfileJSON(),
+        tokens: {
+          access_token: access,
+          refresh_token: refresh
+        }
+      })
     } catch (error) {
       return response.sendError(error)
     }

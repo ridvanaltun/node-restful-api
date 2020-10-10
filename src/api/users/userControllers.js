@@ -15,13 +15,7 @@ exports.createUser = async (req, res, next) => {
 
   if (!success) return next(error)
 
-  const { user, access, refresh } = data
-
-  // bind tokens to response
-  res.set('X-Access-Token', access)
-  res.set('X-Refresh-Token', refresh)
-
-  res.status(201).json(user)
+  res.status(201).json(data)
 }
 
 exports.readUser = async (req, res, next) => {
