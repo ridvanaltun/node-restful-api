@@ -81,6 +81,34 @@ class MailService {
       }
     })
   }
+
+  /**
+   * @description Create activation mail object
+   * @param   {string}  name            User full name
+   * @param   {string}  userId          User id
+   * @param   {string}  ActivationCode  Mail activation code
+   * @return  {object}                  Reset password mail object
+   */
+  createResetPasswordMail (name, userId, activationCode) {
+    const { address, resetPasswordPath } = frontend
+    const remaining = secondsToRemaing(passwordActivationTimeout)
+
+    return mailGenerator.generate({
+      body: {
+        name,
+        intro: `Your password of ${app.name} will reset soon!`,
+        action: {
+          instructions: 'Please click on the link to reset your password.',
+          button: {
+            color: '#22BC66', // Optional action button color
+            text: 'Reset Your Password',
+            link: `${address}${resetPasswordPath}/${userId}/${activationCode}`
+          }
+        },
+        outro: `The link will invalid after ${remaining}.`
+      }
+    })
+  }
 }
 
 module.exports = MailService

@@ -141,7 +141,7 @@ class UserService {
    * @param   {string}  username    Username
    * @param   {string}  password    Current password
    * @param   {string}  newPassword New password
-   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
   async changePassword (username, password, newPassword) {
     try {
@@ -154,7 +154,7 @@ class UserService {
       await user.setPassword(newPassword)
       await user.save()
 
-      return response.sendSuccess(user.toProfileJSON())
+      return response.sendSuccess(true)
     } catch (error) {
       return response.sendError(error)
     }

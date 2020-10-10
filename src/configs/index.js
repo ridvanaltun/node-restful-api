@@ -73,6 +73,7 @@ module.exports = {
   frontend: {
     address: process.env.FRONTEND_ADDRESS,
     emailVerificationPath: process.env.FRONTEND_EMAIL_VERIFICATION_PATH,
+    resetPasswordPath: process.env.FRONTEND_RESET_PASSWORD_PATH,
     logoUrl: process.env.FRONTEND_LOGO_URL
   }
 }

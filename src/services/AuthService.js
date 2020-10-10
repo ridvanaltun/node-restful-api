@@ -6,6 +6,7 @@ const { noReply } = require('../configs').email.address
 // models
 const User = require('mongoose').model('User')
 const MailActivationCode = require('mongoose').model('MailActivationCode')
+const ResetPasswordActivationCode = require('mongoose').model('ResetPasswordActivationCode')
 
 // services
 const MailService = require('./MailService')
@@ -38,7 +39,7 @@ class AuthService {
    * @param   {string}  code    A random generated code for user
    * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
    */
-  async validateActivationMailLink (userId, code) {
+  async validateMailActivationCode (userId, code) {
     try {
       // need for email address
       const user = await User.findById(userId)
@@ -118,6 +119,79 @@ class AuthService {
 
       // return error, sending activation mail fails
       if (!success) return response.sendError(error)
+
+      return response.sendSuccess(true)
+    } catch (error) {
+      return response.sendError(error)
+    }
+  }
+
+  /**
+   * @description Creates reset password code
+   * @param   {string}  username  Username
+   * @return  {string}            Reset password code
+   */
+  async createResetPasswordCode (username) {
+    const code = cryptoRandomString({ length: 6 })
+    await new ResetPasswordActivationCode({ username, code }).save()
+    return code
+  }
+
+  /**
+   * @description Validates reset password activation links
+   * @param   {string}  userId  User id
+   * @param   {string}  code    A random generated code for user
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
+   */
+  async validateResetPasswordActivationCode (userId, code) {
+    try {
+      // need for email address
+      const user = await User.findById(userId)
+
+      // no user no validate
+      if (!user) return response.sendError(createError.NotFound('User not found with given uid'))
+
+      // is activation code exist
+      const activationCode = await ResetPasswordActivationCode.findOne({
+        username: user.username,
+        code: code
+      })
+
+      // no activation code no verify
+      if (!activationCode) return response.sendError(createError.NotFound('Activation code not found'))
+
+      // delete all the user related activation codes
+      await ResetPasswordActivationCode.deleteMany({ username: user.username })
+
+      return response.sendSuccess(true)
+    } catch (error) {
+      return response.sendError(error)
+    }
+  }
+
+  /**
+   * @description Send reset password email
+   * @param   {string}  email User email
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: boolean}>}
+   */
+  async sendResetPasswordMail (email) {
+    try {
+      // find user by email
+      const user = await User.findOne({ email })
+
+      // no user
+      if (!user) return response.sendError(createError.NotFound('User not found with given email address'))
+
+      // create activation code
+      const activationCode = await this.createResetPasswordCode(user.username)
+
+      // prepare data for send email
+      const fullName = `${user.first_name} ${user.last_name}`
+
+      const subject = 'Reset Your Password at Node'
+      const mail = this.MailServiceInstance.createResetPasswordMail(fullName, user._id, activationCode)
+
+      await this.MailServiceInstance.sendMail(noReply, email, subject, mail)
 
       return response.sendSuccess(true)
     } catch (error) {

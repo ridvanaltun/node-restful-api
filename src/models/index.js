@@ -4,4 +4,5 @@ module.exports = () => {
   require('./UserModel')
   require('./RequestLogModel')
   require('./MailActivationCodeModel')
+  require('./ResetPasswordActivationCode')
 }

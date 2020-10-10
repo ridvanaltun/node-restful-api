@@ -8,8 +8,9 @@ const errors = require('./authErrors')
 const configs = require('../../configs')
 
 // services
-const { AuthService } = require('../../services')
+const { AuthService, UserService } = require('../../services')
 const AuthServiceInstance = new AuthService()
+const UserServiceInstance = new UserService()
 
 const maxWrongAttemptsByIPperDay = 100
 const maxConsecutiveFailsByUsernameAndIP = 12
@@ -122,7 +123,6 @@ exports.logout = async (req, res, next) => {
   res.status(204).end()
 }
 
-// todo: add blacklist control
 exports.createToken = async (req, res, next) => {
   const { refresh_token: refreshToken } = req.body
 
@@ -155,7 +155,7 @@ exports.createToken = async (req, res, next) => {
 exports.activateEmail = async (req, res, next) => {
   const { uid, token } = req.body
 
-  const { success, error } = await AuthServiceInstance.validateActivationMailLink(uid, token)
+  const { success, error } = await AuthServiceInstance.validateMailActivationCode(uid, token)
 
   if (!success) return next(error)
 
@@ -166,6 +166,34 @@ exports.activateEmailResend = async (req, res, next) => {
   const { email } = req.body
 
   const { success, error } = await AuthServiceInstance.resendActivationMail(email)
+
+  if (!success) return next(error)
+
+  res.end()
+}
+
+exports.forgotPassword = async (req, res, next) => {
+  const { email } = req.body
+
+  const { success, error } = await AuthServiceInstance.sendResetPasswordMail(email)
+
+  if (!success) return next(error)
+
+  res.end()
+}
+
+exports.resetPassword = async (req, res, next) => {
+  const { uid, token, password, new_password: newPassword } = req.body
+
+  const { success: isLinkValid, error: linkError } = await AuthServiceInstance.validateResetPasswordActivationCode(uid, token)
+
+  if (!isLinkValid) return next(linkError)
+
+  const { success: isUserValid, data: user, error: userError } = await UserServiceInstance.getById(uid)
+
+  if (!isUserValid) return next(userError)
+
+  const { success, error } = await UserServiceInstance.changePassword(user.username, password, newPassword)
 
   if (!success) return next(error)
 

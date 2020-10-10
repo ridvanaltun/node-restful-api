@@ -54,16 +54,15 @@ exports.deleteUser = async (req, res, next) => {
   res.status(204).end()
 }
 
-// todo: add email verification
 exports.updatePassword = async (req, res, next) => {
   const { username } = req.params
   const { password, new_password: newPassword } = req.body
 
-  const { data, success, error } = await UserServiceInstance.changePassword(username, password, newPassword)
+  const { success, error } = await UserServiceInstance.changePassword(username, password, newPassword)
 
   if (!success) return next(error)
 
-  res.json(data)
+  res.end()
 }
 
 exports.listFollows = async (req, res, next) => {
