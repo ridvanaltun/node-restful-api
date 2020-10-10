@@ -23,6 +23,34 @@ class AuthService {
   }
 
   /**
+   * @description Login
+   * @param   {string}  username  User username
+   * @param   {string}  password  User password
+   * @return  {Promise<{success: boolean, error: *}|{success: boolean, data: *}>}
+   */
+  async login (username, password) {
+    const user = await User.findOne({ username })
+
+    // when user not found
+    if (!user) return response.sendError(createError.NotFound('User not found'))
+
+    // validate password
+    const isPasswordCorrect = await user.isPasswordCorrect(password)
+
+    if (!isPasswordCorrect) return response.sendError(createError.BadRequest('Password incorrect'))
+
+    const { access, refresh } = user.generateJWT()
+
+    return response.sendSuccess({
+      user: user.toProfileJSON(),
+      tokens: {
+        access_token: access,
+        refresh_token: refresh
+      }
+    })
+  }
+
+  /**
    * @description Creates activation code for email address
    * @param   {string}  email User email address
    * @return  {string}        Activation code

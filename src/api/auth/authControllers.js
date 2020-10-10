@@ -1,4 +1,3 @@
-const User = require('mongoose').model('User')
 const jwt = require('jsonwebtoken')
 const to = require('await-to-js').default
 const errors = require('./authErrors')
@@ -9,20 +8,12 @@ const { AuthService, UserService } = require('../../services')
 const AuthServiceInstance = new AuthService()
 const UserServiceInstance = new UserService()
 
-// todo: move db process to services
 exports.login = async (req, res, next) => {
   const { username, password } = req.body
 
-  // find user
-  const user = await User.findOne({ username })
+  const { success, data, error } = await AuthServiceInstance.login(username, password)
 
-  // when user not found
-  if (!user) return next(errors.userNotFound())
-
-  // validate password
-  const isPasswordCorrect = await user.isPasswordCorrect(password)
-
-  if (!isPasswordCorrect) {
+  if (error && error.message === 'Password incorrect') {
     // consume daily limit
     const [maxRetryDailyErr] = await to(req.limitters.limitSlowBruteByIpConsume())
 
@@ -44,18 +35,12 @@ exports.login = async (req, res, next) => {
     return next(errors.passwordIncorrect())
   }
 
+  if (!success) return next(error)
+
   // reset username+ip based api limit on successful authorisation
   req.limitters.resetConsecutiveFailsByUsernameAndIP()
 
-  const { access, refresh } = user.generateJWT()
-
-  res.json({
-    user: user.toProfileJSON(),
-    tokens: {
-      access_token: access,
-      refresh_token: refresh
-    }
-  })
+  res.json(data)
 }
 
 exports.logout = async (req, res, next) => {
