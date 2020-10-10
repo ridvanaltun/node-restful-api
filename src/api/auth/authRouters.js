@@ -1,5 +1,6 @@
 const express = require('express')
 const validator = require('./authValidators')
+const limitters = require('./authLimitters')
 const common = require('../common')
 
 const {
@@ -14,7 +15,7 @@ const {
 
 const auth = express.Router()
 
-auth.route('/login').post(validator.login, login)
+auth.route('/login').post(validator.login, limitters.login, login)
 
 auth.route('/logout').post(common.auth.required, validator.logout, logout)
 
