@@ -105,16 +105,6 @@ module.exports = async ({ app, agenda, blacklist }) => {
   // load api routes
   app.use(enums.API.PREFIX, routes())
 
-  // api durumu hakkında bilgi döndürmek için kullanıyoruz
-  // api erişilemez bir durumdaysa bu adreslerden dönen cevaba bakabiliriz
-  app.route(`${enums.API.PREFIX}/status`)
-    .get((req, res) => {
-      res.status(200).end()
-    })
-    .head((req, res) => {
-      res.status(200).end()
-    })
-
   // set agenda
   // todo: dockerize dash or use somethong else
   app.use('/dash', agenda)
