@@ -16,4 +16,4 @@ exports.passwordIncorrect = () => createError.BadRequest('Password incorrect')
 
 exports.refreshTokenRevoked = () => createError.Forbidden('Refresh token revoked')
 
-exports.accessTokenMalformed = () => createError.Forbidden('Access token malformed')
+exports.refreshTokenMalformed = () => createError.Forbidden('Refresh token malformed')

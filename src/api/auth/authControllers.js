@@ -49,7 +49,7 @@ exports.logout = async (req, res, next) => {
   // not allow jwt without exp
   const ok = await req.blacklist.add(refreshToken)
 
-  if (!ok) return next(errors.accessTokenMalformed())
+  if (!ok) return next(errors.refreshTokenMalformed())
 
   res.status(204).end()
 }
@@ -81,6 +81,17 @@ exports.createToken = async (req, res, next) => {
       refresh_token: refreshToken
     })
   })
+}
+
+exports.revokeToken = async (req, res, next) => {
+  const { token: refreshToken } = req.params
+
+  // not allow jwt without exp
+  const ok = await req.blacklist.add(refreshToken)
+
+  if (!ok) return next(errors.refreshTokenMalformed())
+
+  res.status(204).end()
 }
 
 exports.activateEmail = async (req, res, next) => {

@@ -10,7 +10,8 @@ const {
   activateEmail,
   activateEmailResend,
   forgotPassword,
-  resetPassword
+  resetPassword,
+  revokeToken
 } = require('./authControllers')
 
 const auth = express.Router()
@@ -19,7 +20,9 @@ auth.route('/login').post(validator.login, limitters.login, login)
 
 auth.route('/logout').post(common.auth.required, validator.logout, logout)
 
-auth.route('/token').post(validator.createToken, createToken)
+auth.route('/tokens').post(validator.createToken, createToken)
+
+auth.route('/tokens/:token').delete(revokeToken)
 
 auth.route('/confirmation/email').post(validator.activateEmail, activateEmail)
 
