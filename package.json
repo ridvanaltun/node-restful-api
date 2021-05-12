@@ -56,7 +56,7 @@
     "mongoose-paginate-v2": "^1.3.9",
     "mongoose-unique-validator": "^2.0.3",
     "morgan": "^1.10.0",
-    "nodemailer": "^6.4.13",
+    "nodemailer": "^6.4.16",
     "omit-empty": "^1.0.0",
     "rate-limiter-flexible": "^2.1.10",
     "request-ip": "^2.1.3",
