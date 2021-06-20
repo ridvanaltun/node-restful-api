@@ -1,0 +1,30 @@
+services:
+  node-app-api:
+    build:
+      context: ./
+      target: production
+    container_name: node-app-api
+    command: npm run start
+    volumes:
+      - .:/src
+      # Save the builded node_modules folder,
+      # don`t override node_modules from host during runtime
+      # @see https://stackoverflow.com/a/32785014/7376041
+      - /src/node_modules
+    ports:
+      - ${APP_PORT}:3000
+    environment:
+      NODE_ENV: production
+    env_file:
+      - .env.production
+    restart: always
+
+  node-app-mongodb:
+    env_file:
+      - .env.production
+    restart: always
+
+  node-app-redis:
+    env_file:
+      - .env.production
+    restart: always
