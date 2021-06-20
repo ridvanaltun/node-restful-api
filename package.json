@@ -4,8 +4,8 @@
   "description": "",
   "main": "./src/app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=PRODUCTION node src/app.js",
-    "start:dev": "cross-env NODE_ENV=DEVELOPMENT nodemon src/app.js",
+    "start": "node src/app.js",
+    "start:dev": "nodemon src/app.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "commit": "git-cz",
@@ -21,7 +21,6 @@
     "@commitlint/config-conventional": "^12.1.4",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/git": "^9.0.0",
-    "cross-env": "^7.0.3",
     "cz-conventional-changelog": "^3.3.0",
     "eslint": "^7.29.0",
     "eslint-config-standard": "^16.0.3",
@@ -30,7 +29,6 @@
     "eslint-plugin-promise": "^5.1.0",
     "husky": "^6.0.0",
     "lint-staged": "^11.0.0",
-    "nodemon": "^2.0.7",
     "semantic-release": "^17.4.4"
   },
   "dependencies": {

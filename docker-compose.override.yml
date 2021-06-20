@@ -1,0 +1,43 @@
+services:
+  node-app-api:
+    build:
+      context: ./
+      target: dev
+    container_name: node-app-api
+    #command: npm run start:dev
+    command: sh -c "cd /src/ && npm install && npm run start:dev"
+    volumes:
+      - .:/src
+    ports:
+      - ${APP_PORT}:3000
+    environment:
+      NODE_ENV: development
+    env_file:
+      - .env
+
+  node-app-mongoku:
+    build: ./docker/mongoku
+    container_name: node-app-mongoku
+    command: dockerize -wait http://node-app-mongodb:${MONGO_PORT} bash /app/docker-run.sh
+    depends_on:
+      - node-app-mongodb
+    ports:
+      - ${MONGOKU_PORT}:3100
+    environment:
+      MONGOKU_DEFAULT_HOST: "${MONGO_USERNAME}:${MONGO_PASSWORD}@node-app-mongodb:${MONGO_PORT}"
+    env_file:
+      - .env
+    restart: always
+
+  node-app-redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: node-app-redis-commander
+    depends_on:
+      - node-app-redis
+    env_file:
+      - .env
+    environment:
+      REDIS_HOSTS: "${REDIS_BLACKLIST_KEY}:node-app-redis:${REDIS_PORT}:0:${REDIS_PASSWORD}"
+    ports:
+      - ${REDIS_COMMANDER_PORT}:8081
+    restart: always

@@ -38,8 +38,11 @@ $ docker volume create --name=node-app-database-data
 # create global volume for Redis
 $ docker volume create --name=node-app-redis-data
 
-# create your own environment file
+# create your own environment file for development
 $ cp .env.example .env
+
+# create your own environment file for production
+$ cp .env.example .env.production
 ```
 
 ### Customize Your Environment File
@@ -81,18 +84,47 @@ These configuration variables are using by activation email.
 
 ## Usage
 
-```bash
-# start MongoDB and Mogoku (MongoDB Collection Viewer)
-$ docker-compose up -d
+You can start the API server for development or production.
 
-# start NodeJS server on 3000
-$ npm run start
+### Development
+
+If you wanna move on developing this, go ahead with below command:
+
+```bash
+# start everything for development
+$ docker-compose up -d
 ```
 
+After all's below services will work:
+
+- `API Server` - runs at 3000 (It is a Node.js app)
 - `MongoDB` runs at 27017
-- `Mogoku` runs at 3100
+- `Mogoku` runs at 3100 (MongoDB Collection Viewer)
 - `Redis` runs at 6379
-- `Redis Commander` runs at 8081
+- `Redis Commander` runs at 8081 (Redis Web Management Tool)
+
+All changes of API effects immediately.
+
+### Production
+
+Or you can build up a production environment follow the below command:
+
+```bash
+#  start everything for production
+$ docker-compose -f docker-compose.yml -f docker-compose.prod.yml up -d
+```
+
+Below services will start:
+
+- `API Server` - runs at 3000
+- `MongoDB` runs at 27017
+- `Redis` runs at 6379
+
+Changes of API not will effected.
+
+**Note For Developers:** `docker-compose.yml` file is the base file and using with development and production environments both. `docker-compose.prod.yml` extends the `docker-compose.yml` file for production and `docker-compose.override.yml` file extends the `docker-compose.yml` file for development.
+
+[Read more to understand how this docker-compose structure works](https://docs.docker.com/compose/extends/)
 
 ## To:Do
 
@@ -113,3 +145,4 @@ $ npm run start
 - [ ] Add documantation for pagination and endpoints
 - [x] Add access control system
 - [ ] Add auto semantic release with a CI/CD tool
+- [x] Dockerize everything

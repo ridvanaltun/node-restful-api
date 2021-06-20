@@ -1,8 +1,8 @@
 module.exports = {
   APP: {
     MODES: {
-      PROD: 'PRODUCTION',
-      DEV: 'DEVELOPMENT'
+      PROD: 'production',
+      DEV: 'development'
     }
   },
   API: {
