@@ -7,6 +7,7 @@ const middlewares = require('../middlewares')
 const configs = require('../configs')
 const enums = require('../enums')
 const routes = require('../api')
+const generalAPI = require('../api/general')
 
 module.exports = async ({ app, agenda, blacklist }) => {
   /**
@@ -102,11 +103,16 @@ module.exports = async ({ app, agenda, blacklist }) => {
    * Handle Routes
    */
 
+  // load general api routes
+  app.use(enums.API.PREFIX, generalAPI.routers())
+
   // load api routes
-  app.use(enums.API.PREFIX, routes())
+  const { version } = configs.api
+  app.use(`${enums.API.PREFIX}/${version}`, routes())
 
   // set agenda
-  // todo: dockerize dash or use somethong else
+  // todo: dockerize dash or use a different tool
+  // todo: TooManyRequestsError
   app.use('/dash', agenda)
 
   /**
