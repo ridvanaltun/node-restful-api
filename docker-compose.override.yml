@@ -10,6 +10,7 @@ services:
       - .:/src
     ports:
       - ${APP_PORT}:3000
+      - "9229:9229" # debug port
     environment:
       NODE_ENV: development
     env_file:

@@ -1,4 +1,4 @@
-# Node RESTful API
+# Node RESTful API <!-- omit in toc -->
 
 [![semantic-release](https://img.shields.io/badge/%20%20%F0%9F%93%A6%F0%9F%9A%80-semantic--release-e10079.svg)](https://github.com/semantic-release/semantic-release) [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
@@ -10,11 +10,8 @@ Test the API with Postman easily.
 
 [![Run in Postman](https://run.pstmn.io/button.svg)](https://app.getpostman.com/run-collection/27f530d3328ab087602c?action=collection%2Fimport#?env%5BNode%20REST%20API%5D=W3sia2V5IjoiYmFzZSIsInZhbHVlIjoiaHR0cDovL2xvY2FsaG9zdDozMDAwIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJhY2Nlc3NUb2tlbiIsInZhbHVlIjoiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV5SnBaQ0k2SWpZd1kyWXpNMll6WW1Rd1lqTTBOREUwWXpZeU5HTXdZaUlzSW5WelpYSnVZVzFsSWpvaWNtVmhaMkZ1T0RFaUxDSnliMnhsSWpvaVltRnphV01pTENKcFlYUWlPakUyTWpReE9UUTJPRGtzSW1WNGNDSTZNVFl5TkRFNU9ESTRPWDAuY1ZLS2UyS3kwcHFVUEhQTlZfUUJBZUpNb04xcTNNUHVEcUFVbFF6OGdEdyIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoicmVmcmVzaFRva2VuIiwidmFsdWUiOiJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXlKcFpDSTZJall3WTJZek0yWXpZbVF3WWpNME5ERTBZell5TkdNd1lpSXNJblZ6WlhKdVlXMWxJam9pY21WaFoyRnVPREVpTENKeWIyeGxJam9pWW1GemFXTWlMQ0pwWVhRaU9qRTJNalF4T1RRMk9Ea3NJbVY0Y0NJNk1UWXlOREl3TVRnNE9YMC5uRHBNeU5LQnVmaTJIX0dtNmN5SE8yYVpSN3kybEZLeXBQek5EQ0ZJOTJFIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJ0YXNrSWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoidXNlcm5hbWUiLCJ2YWx1ZSI6InJlYWdhbjgxIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJwYXNzd29yZCIsInZhbHVlIjoiOWRtekRmdDVpaW5wQUNjIiwiZW5hYmxlZCI6dHJ1ZX0seyJrZXkiOiJyZWZyZXNoTG9nSWQiLCJ2YWx1ZSI6IiIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoiZW1haWwiLCJ2YWx1ZSI6ImNvcm5lbGl1czcyQHlhaG9vLmNvbSIsImVuYWJsZWQiOnRydWV9LHsia2V5IjoidmVyc2lvbiIsInZhbHVlIjoidjEuMCIsImVuYWJsZWQiOnRydWV9XQ==)
 
-# Table of Contents
+# Table of Contents <!-- omit in toc -->
 
-- [Node RESTful API](#node-restful-api)
-  - [Postman Collection](#postman-collection)
-- [Table of Contents](#table-of-contents)
 - [Prerequisite](#prerequisite)
 - [Installation](#installation)
   - [Customizing Environment File](#customizing-environment-file)
@@ -26,7 +23,7 @@ Test the API with Postman easily.
   - [Development](#development)
   - [Production](#production)
 - [API Versioning](#api-versioning)
-- [To:Do](#todo)
+- [Checklist](#checklist)
 
 # Prerequisite
 
@@ -150,7 +147,7 @@ Below services will start:
 
 API versions are coming from the environment file. For using multiple version of API, use a version control system like git and tag every version on it. After all, you can use tags to deploy spesific version of the API. Version controlling of API on code is possible but it is bit complex. I think this way covers the best practices.
 
-# To:Do
+# Checklist
 
 - [x] Add JWT (JSON Web Tokens)
 - [x] Add ability to refresh JWT token
@@ -171,3 +168,4 @@ API versions are coming from the environment file. For using multiple version of
 - [ ] Add auto semantic release with a CI/CD tool
 - [x] Dockerize everything
 - [ ] Deploy API for showcase
+- [x] Debugger support for NodeJS app in Docker
